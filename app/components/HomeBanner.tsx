@@ -21,12 +21,12 @@ const HomeBanner = () => {
             </button>
           </Link>
         </div>
-        <div className="w-full md:w-1/3 lg:w-1/2 relative aspect-[3/2] md:aspect-auto">
+        <div className="w-full md:w-1/2 lg:w-1/3 relative h-64 md:h-80 lg:h-96">
           <Image
             src="/banner-image.png"
-            fill
+            layout="fill"
+            objectFit="contain"
             alt="Banner Image"
-            className="object-contain"
           />
         </div>
       </div>
@@ -35,3 +35,4 @@ const HomeBanner = () => {
 };
 
 export default HomeBanner;
+
