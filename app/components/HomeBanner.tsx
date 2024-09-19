@@ -31,20 +31,11 @@ const HomeBanner = () => {
           />
         </div>
       </div>
-
-      <div className="text-center md:text-left px-4 md:px-8 py-8 bg-sky-600">
-        <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-          Limited Time Offer!
-        </h2>
-        <p className="text-md md:text-lg text-white">
-          Shop the latest trends in footwear, from casual kicks to office shoes,
-          and stay ahead of the style game. Free shipping on orders above $50!
-        </p>
-      </div>
     </div>
   );
 };
 
 export default HomeBanner;
+
 
 
