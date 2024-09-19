@@ -3,8 +3,8 @@ import Link from "next/link";
 
 const HomeBanner = () => {
   return (
-    <div className="relative bg-gradient-to-r from-sky-500 to-sky-700 mb-8 rounded-lg shadow-lg overflow-hidden">
-      <div className="mx-auto px-4 md:px-8 py-12 flex flex-col-reverse md:flex-row items-center justify-between">
+    <div className="relative bg-gradient-to-r from-sky-500 to-sky-700 h-screen flex items-center justify-center overflow-hidden">
+      <div className="absolute inset-0 flex flex-col md:flex-row items-center justify-between px-4 md:px-6 py-4 md:py-8">
         <div className="text-center md:text-left md:mr-8 max-w-lg">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-4">
             Step Into Fashion Today
@@ -22,11 +22,11 @@ const HomeBanner = () => {
           </Link>
         </div>
 
-        <div className="w-full md:w-1/2 lg:w-2/5 relative h-56 md:h-80 lg:h-[30rem]">
+        <div className="absolute inset-0 md:w-1/2 lg:w-2/5 h-full">
           <Image
             src="/banner-image.png"
             layout="fill"
-            objectFit="contain"
+            objectFit="cover"
             alt="Banner Image"
           />
         </div>
@@ -36,6 +36,7 @@ const HomeBanner = () => {
 };
 
 export default HomeBanner;
+
 
 
 
