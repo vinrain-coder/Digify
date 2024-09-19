@@ -4,7 +4,7 @@ import Link from "next/link";
 const HomeBanner = () => {
   return (
     <div className="relative bg-gradient-to-r from-sky-500 to-sky-700 mb-8 rounded-lg shadow-lg overflow-hidden">
-      <div className="mx-auto px-2 md:px-4 py-4 flex flex-col-reverse md:flex-row items-center justify-between">
+      <div className="mx-auto px-4 md:px-8 py-4 flex flex-col-reverse md:flex-row items-center justify-between">
         <div className="text-center md:text-left md:mr-8 max-w-lg">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-4">
             Step Into Fashion Today
