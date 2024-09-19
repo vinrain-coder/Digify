@@ -2,59 +2,78 @@ import Link from "next/link";
 import Container from "../Container";
 import FooterList from "./FooterList";
 import { MdFacebook } from "react-icons/md";
-import {
-  AiFillTwitterCircle,
-  AiFillInstagram,
-  AiFillYoutube,
-} from "react-icons/ai";
+import { AiFillTwitterCircle, AiFillInstagram, AiFillYoutube } from "react-icons/ai";
 
 const Footer = () => {
   return (
-    <footer className="bg-slate-700 text-slate-200 text-sm mt-16">
+    <footer className="bg-slate-800 text-slate-200 text-sm mt-16">
       <Container>
-        <div className="flex flex-col md:flex-row justify-between pt-16 pb-18">
+        <div className="flex flex-col md:flex-row flex-wrap justify-between pt-16 pb-12">
           <FooterList>
-            <h3 className="text-base font-bold mb-2">Shop Caregories</h3>
-            <Link href="#">Sneakers</Link>
-            <Link href="#">Heels</Link>
-            <Link href="#">Men</Link>
-            <Link href="#">Office Shoes</Link>
-            <Link href="#">Women</Link>
-            <Link href="#">Kids</Link>
+            <h3 className="text-lg font-bold text-white mb-4">Shop Categories</h3>
+            <Link href="#" className="hover:text-yellow-400 transition-colors">
+              Sneakers
+            </Link>
+            <Link href="#" className="hover:text-yellow-400 transition-colors">
+              Heels
+            </Link>
+            <Link href="#" className="hover:text-yellow-400 transition-colors">
+              Men
+            </Link>
+            <Link href="#" className="hover:text-yellow-400 transition-colors">
+              Office Shoes
+            </Link>
+            <Link href="#" className="hover:text-yellow-400 transition-colors">
+              Women
+            </Link>
+            <Link href="#" className="hover:text-yellow-400 transition-colors">
+              Kids
+            </Link>
           </FooterList>
+          
           <FooterList>
-            <h3 className="text-base font-bold mb-2">Customer Service</h3>
-            <Link href="#">Contact us</Link>
-            <Link href="#">Shipping Policy</Link>
-            <Link href="#">Returns and Exchanges</Link>
-            <Link href="#">Sneakers</Link>
-            <Link href="#">FAQs</Link>
+            <h3 className="text-lg font-bold text-white mb-4">Customer Service</h3>
+            <Link href="#" className="hover:text-yellow-400 transition-colors">
+              Contact us
+            </Link>
+            <Link href="#" className="hover:text-yellow-400 transition-colors">
+              Shipping Policy
+            </Link>
+            <Link href="#" className="hover:text-yellow-400 transition-colors">
+              Returns and Exchanges
+            </Link>
+            <Link href="#" className="hover:text-yellow-400 transition-colors">
+              Sneakers
+            </Link>
+            <Link href="#" className="hover:text-yellow-400 transition-colors">
+              FAQs
+            </Link>
           </FooterList>
-          <div className="w-full md:w-1/3 mb-6 md:mb-0">
-            <h3 className="text-base font-bold mb-2">About Us</h3>
-            <p className="mb-2">
-              At our shoe strore we are dedicated to bring to you the latest ,
-              fashionable and quality footwear. With us you will never miss a
-              chance to drip.
+          
+          <div className="w-full md:w-1/3 lg:w-1/4 mb-8">
+            <h3 className="text-lg font-bold text-white mb-4">About Us</h3>
+            <p className="mb-4 text-slate-300">
+              At our shoe store, we are dedicated to bringing you the latest fashionable and quality footwear. With us, you will never miss a chance to elevate your style.
             </p>
-            <p>
-              &copy; {new Date().getFullYear()} Shoepedi. All Rights reserved
+            <p className="text-slate-400">
+              &copy; {new Date().getFullYear()} Shoepedi. All Rights Reserved.
             </p>
           </div>
+          
           <FooterList>
-            <h3 className="text-base font-bold mb-2">Follow Us</h3>
-            <div className="flex gap-2">
-              <Link href="#">
-                <MdFacebook size={24} />
+            <h3 className="text-lg font-bold text-white mb-4">Follow Us</h3>
+            <div className="flex gap-4">
+              <Link href="#" className="text-white hover:text-blue-500 transition-colors">
+                <MdFacebook size={28} />
               </Link>
-              <Link href="#">
-                <AiFillTwitterCircle size={24} />
+              <Link href="#" className="text-white hover:text-blue-400 transition-colors">
+                <AiFillTwitterCircle size={28} />
               </Link>
-              <Link href="#">
-                <AiFillInstagram size={24} />
+              <Link href="#" className="text-white hover:text-pink-500 transition-colors">
+                <AiFillInstagram size={28} />
               </Link>
-              <Link href="#">
-                <AiFillYoutube size={24} />
+              <Link href="#" className="text-white hover:text-red-600 transition-colors">
+                <AiFillYoutube size={28} />
               </Link>
             </div>
           </FooterList>
