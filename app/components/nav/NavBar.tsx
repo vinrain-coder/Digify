@@ -21,14 +21,20 @@ const NavBar = () => {
           <div className="flex items-center justify-between gap-3 md:gap-0">
             <Link
               href="/"
-              className={`${redressed.className} font-bold text-2xl`}
+              className={`${redressed.className} font-bold text-3xl text-indigo-600`}
             >
               Shoepedi
             </Link>
-            <div className="hidden md:block">Search</div>
-            <div className="flex items-center gap-8 md:gap-12">
-              <div>CartCount</div>
-              <div>UserMenu</div>
+            <div className="flex items-center gap-6 md:gap-12">
+              <button className="text-gray-700 hover:text-indigo-600 transition font-semibold">
+                Wishlist
+              </button>
+              <button className="text-gray-700 hover:text-indigo-600 transition font-semibold">
+                Cart (0)
+              </button>
+              <button className="text-gray-700 hover:text-indigo-600 transition font-semibold">
+                Menu
+              </button>
             </div>
           </div>
         </Container>
