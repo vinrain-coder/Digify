@@ -5,7 +5,7 @@ import ProductCard from "./components/products/ProductCard";
 
 export default function Home() {
   return (
-    <div className="p-8">
+    <div className="p-2">
       <Container>
         <div>
           <HomeBanner />
