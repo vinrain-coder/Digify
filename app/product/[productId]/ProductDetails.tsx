@@ -2,7 +2,7 @@
 
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import SetColor from "@/app/components/products/SetColor";
 import SetSize from "@/app/components/products/SetSize";
 import { Rating } from "@mui/material";
@@ -10,6 +10,9 @@ import SetQuantity from "@/app/components/products/SetQuantity";
 import Button from "@/app/components/Button";
 import ProductImage from "@/app/components/products/ProductImage";
 import ProductDescription from "./ProductDescription";
+import { useCart } from "@/hooks/useCart";
+import { MdCheckCircle } from "react-icons/md";
+import { useRouter } from "next/navigation";
 
 interface ProductDetailsProps {
   product: {
@@ -49,19 +52,40 @@ const Horizontal = () => {
 };
 
 const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
+  const { handleAddProductToCart, cartProducts } = useCart();
+  const [isProductInCart, setIsProductInCart] = useState(false);
   const [cartProduct, setCartProduct] = useState<CartProductType>({
     id: product.id,
     name: product.name,
     description: product.description,
     category: product.category,
     brand: product.brand,
-    size: product.sizes?.length ? product.sizes[0] : "", 
+    size: product.sizes?.length ? product.sizes[0] : "",
     selectedImg: product.images?.length
       ? product.images[0]
       : { color: "", colorCode: "", image: "" },
     quantity: 1,
     price: product.price,
   });
+
+  const router=useRouter()
+
+  console.log(cartProducts);
+
+  useEffect(() => {
+    setIsProductInCart(false);
+  
+    if (cartProducts && product) {
+      const existingIndex = cartProducts.findIndex(
+        (item) => item.id === product.id
+      );
+  
+      if (existingIndex > -1) {
+        setIsProductInCart(true);
+      }
+    }
+  }, [cartProducts, product]);
+  
 
   const productRating =
     product.reviews.length > 0
@@ -103,74 +127,95 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-  {/* Product Image Section */}
-  <ProductImage
-    cartProduct={cartProduct}
-    product={product}
-    handleColorSelect={handleColorSelect}
-  />
+      {/* Product Image Section */}
+      <ProductImage
+        cartProduct={cartProduct}
+        product={product}
+        handleColorSelect={handleColorSelect}
+      />
 
-  {/* Product Details Section */}
-  <div className="flex flex-col gap-4 text-slate-500 text-small">
-    {/* Product Name and Rating */}
-    <h2 className="text-3xl font-medium text-slate-700">{product.name}</h2>
-    <div className="flex items-center gap-2">
-      <Rating value={productRating} readOnly />
-      <div>{product.reviews.length} reviews</div>
+      {/* Product Details Section */}
+      <div className="flex flex-col gap-4 text-slate-500 text-small">
+        {/* Product Name and Rating */}
+        <h2 className="text-3xl font-medium text-slate-700">{product.name}</h2>
+        <div className="flex items-center gap-2">
+          <Rating value={productRating} readOnly />
+          <div>{product.reviews.length} reviews</div>
+        </div>
+        <Horizontal />
+
+        {/* Product Description with "Show More/Show Less" */}
+        <div className="text-justify">
+          <ProductDescription description={product.description} />
+        </div>
+        <Horizontal />
+
+        {/* Product Category and Brand */}
+        <div className="font-semibold">
+          <span>CATEGORY: </span>
+          {product.category}
+        </div>
+        <div className="font-semibold">
+          <span>BRAND: </span>
+          {product.brand}
+        </div>
+
+        {/* Stock Information */}
+        <div className={product.inStock ? "text-teal-400" : "text-rose-400"}>
+          {product.inStock ? "In Stock" : "Out of Stock"}
+        </div>
+        <Horizontal />
+
+        {isProductInCart ? (
+          <>
+          <p className="mb-2 text-slate-500 flex items-center gap-1">
+            <MdCheckCircle className="text-teal-400" size={20}/>
+            <span> Product added to cart </span>
+          </p>
+          <div className="max-w-[300px]">
+          <Button label="View Cart" outline onClick={() =>{
+            router.push('/cart')
+          }}/>
+          </div>
+          </>
+        ) : (
+          <>
+            {/* Color Selector */}
+            <SetColor
+              cartProduct={cartProduct}
+              images={product.images || []}
+              handleColorSelect={handleColorSelect}
+            />
+            <Horizontal />
+
+            {/* Size Selector */}
+            <SetSize
+              sizes={product.sizes || []}
+              selectedSize={cartProduct.size}
+              handleSizeSelect={handleSizeSelect}
+            />
+            <Horizontal />
+
+            {/* Quantity Selector */}
+            <SetQuantity
+              cartProduct={cartProduct}
+              handleQuantityDecrease={handleQuantityDecrease}
+              handleQuantityIncrease={handleQuantityIncrease}
+            />
+            <Horizontal />
+
+            {/* Add to Cart Button */}
+            <div className="max-w-[300px]">
+              <Button
+                outline
+                label="Add to Cart"
+                onClick={() => handleAddProductToCart(cartProduct)}
+              />
+            </div>
+          </>
+        )}
+      </div>
     </div>
-    <Horizontal />
-
-    {/* Product Description with "Show More/Show Less" */}
-    <div className="text-justify">
-      <ProductDescription description={product.description} />
-    </div>
-    <Horizontal />
-
-    {/* Product Category and Brand */}
-    <div className="font-semibold">
-      <span>CATEGORY: </span>{product.category}
-    </div>
-    <div className="font-semibold">
-      <span>BRAND: </span>{product.brand}
-    </div>
-
-    {/* Stock Information */}
-    <div className={product.inStock ? "text-teal-400" : "text-rose-400"}>
-      {product.inStock ? "In Stock" : "Out of Stock"}
-    </div>
-    <Horizontal />
-
-    {/* Color Selector */}
-    <SetColor
-      cartProduct={cartProduct}
-      images={product.images || []}
-      handleColorSelect={handleColorSelect}
-    />
-    <Horizontal />
-
-    {/* Size Selector */}
-    <SetSize
-      sizes={product.sizes || []}
-      selectedSize={cartProduct.size}
-      handleSizeSelect={handleSizeSelect}
-    />
-    <Horizontal />
-
-    {/* Quantity Selector */}
-    <SetQuantity
-      cartProduct={cartProduct}
-      handleQuantityDecrease={handleQuantityDecrease}
-      handleQuantityIncrease={handleQuantityIncrease}
-    />
-    <Horizontal />
-
-    {/* Add to Cart Button */}
-    <div className="max-w-[300px]">
-      <Button outline label="Add to Cart" onClick={() => {}} />
-    </div>
-  </div>
-</div>
-
   );
 };
 

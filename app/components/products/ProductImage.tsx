@@ -28,7 +28,9 @@ const ProductImage: React.FC<ProductImageProps> = ({
               src={cartProduct.selectedImg.image}
               alt={cartProduct.name}
               fill
+              sizes="(max-width: 1024px) 100vw, 60vw"
               className="object-contain rounded-lg"
+              priority
             />
           </Zoom>
         </div>
@@ -48,6 +50,7 @@ const ProductImage: React.FC<ProductImageProps> = ({
                 src={image.image}
                 alt={image.color}
                 fill
+                sizes="80px"
                 className="object-cover rounded-lg"
               />
             </div>
@@ -70,6 +73,7 @@ const ProductImage: React.FC<ProductImageProps> = ({
               src={image.image}
               alt={image.color}
               fill
+              sizes="80px"
               className="object-cover rounded-lg"
             />
           </div>
