@@ -30,7 +30,3 @@ const Product = ({ params }: { params: IParams }) => {
 };
 
 export default Product;
-<<<<<<< HEAD
-=======
-
->>>>>>> 9227df1 (completed cart functionality)
