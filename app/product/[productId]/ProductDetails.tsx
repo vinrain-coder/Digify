@@ -135,7 +135,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
       />
 
       {/* Product Details Section */}
-      <div className="flex flex-col gap-2 text-slate-500 text-small">
+      <div className="flex flex-col gap-2 text-slate-500 text-small lg:mt-20">
         {/* Product Name and Rating */}
         <h2 className="text-3xl font-medium text-slate-700">{product.name}</h2>
         <div className="flex items-center gap-2">
