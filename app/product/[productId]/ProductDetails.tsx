@@ -126,7 +126,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
       {/* Product Image Section */}
       <ProductImage
         cartProduct={cartProduct}
@@ -135,7 +135,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
       />
 
       {/* Product Details Section */}
-      <div className="flex flex-col gap-4 text-slate-500 text-small">
+      <div className="flex flex-col gap-2 text-slate-500 text-small">
         {/* Product Name and Rating */}
         <h2 className="text-3xl font-medium text-slate-700">{product.name}</h2>
         <div className="flex items-center gap-2">
