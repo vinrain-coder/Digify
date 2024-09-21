@@ -48,7 +48,7 @@ export type SelectedImgType = {
 };
 
 const Horizontal = () => {
-  return <hr className="w-[30%] my-2" />;
+  return <hr className="w-[30%] my-1" />;
 };
 
 const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
