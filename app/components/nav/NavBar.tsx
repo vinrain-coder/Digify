@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Container from "../Container";
 import { Redressed } from "next/font/google";
+import CartCount from "./CartCount";
 
 const redressed = Redressed({ subsets: ["latin"], weight: ["400"] });
 
@@ -30,7 +31,7 @@ const NavBar = () => {
                 Wishlist
               </button>
               <button className="text-gray-700 hover:text-indigo-600 transition font-semibold">
-                Cart (0)
+                <CartCount/>
               </button>
               <button className="text-gray-700 hover:text-indigo-600 transition font-semibold">
                 Menu
