@@ -46,31 +46,29 @@ const CartClient = () => {
       </div>
 
       <div className="border-t border-slate-200 py-4 flex flex-col gap-4">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center gap-10">
           <div className="w-32">
-
-          <Button
-            label="Clear Cart"
-            onClick={handleClearCart}
-            small
-            outline
-          />
+            <Button
+              label="Clear Cart"
+              onClick={handleClearCart}
+              small
+              outline
+            />
           </div>
           <div className="text-sm flex flex-col items-start">
             <div className="flex justify-between w-full text-base font-semibold">
               <span>Sub-total</span>
               <span>{formatPrice(cartTotalAmount)}</span>
             </div>
-            <p className="text-slate-500">Taxes and shipping calculated at checkout</p>
+            <p className="text-slate-500">
+              Taxes and shipping calculated at checkout
+            </p>
           </div>
         </div>
 
         <div className="flex flex-col gap-2 items-end">
           <Button label="Checkout" custom="md:w-40" onClick={() => {}} />
-          <Link
-            href={"/"}
-            className="text-slate-500 flex items-center gap-1"
-          >
+          <Link href={"/"} className="text-slate-500 flex items-center gap-1">
             <MdArrowBack />
             <span>Continue shopping</span>
           </Link>
@@ -81,6 +79,3 @@ const CartClient = () => {
 };
 
 export default CartClient;
-
-
-
