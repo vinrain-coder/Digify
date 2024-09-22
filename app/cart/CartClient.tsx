@@ -31,31 +31,43 @@ const CartClient = () => {
   return (
     <div className="p-2 md:p-8">
       <Heading title="Shopping Cart" center />
-      <div className="grid grid-cols-1 md:grid-cols-5 text-xs gap-4 pb-2 items-center mt-8">
-        <div className="col-span-2 justify-self-start">PRODUCT</div>
-        <div className="justify-self-center">PRICE</div>
-        <div className="justify-self-center">QUANTITY</div>
-        <div className="justify-self-end">TOTAL</div>
+
+      {/* Responsive headings for small devices */}
+      <div className="flex justify-between text-xs pb-2 items-center mt-8 font-semibold">
+        <div>PRODUCT</div>
+        <div className="hidden md:flex ml-[240px]">QUANTITY</div>
+        <div>TOTAL</div>
       </div>
-      <div>
+
+      <div className="flex flex-col mt-4 gap-4">
         {cartProducts.map((item) => (
           <ItemContent key={item.id} item={item} />
         ))}
       </div>
-      <div className="border-t border-slate-200 py-4 flex flex-col md:flex-row justify-between gap-4">
-        <div className="flex justify-center md:justify-start">
-          <Button label="Clear Cart" onClick={handleClearCart} small outline />
-        </div>
-        <div className="text-sm flex flex-col gap-1 items-start">
-          <div className="flex justify-between w-full text-base font-semibold">
-            <span>Sub-total</span>
-            <span>{formatPrice(cartTotalAmount)}</span>
+
+      <div className="border-t border-slate-200 py-4 flex flex-col gap-4">
+        <div className="flex justify-between items-center gap-2">
+          <Button
+            label="Clear Cart"
+            onClick={handleClearCart}
+            small
+            outline
+            custom="w-32" /* Reduced width */
+          />
+          <div className="text-sm flex flex-col items-start">
+            <div className="flex justify-between w-full text-base font-semibold">
+              <span>Sub-total</span>
+              <span>{formatPrice(cartTotalAmount)}</span>
+            </div>
+            <p className="text-slate-500">Taxes and shipping calculated at checkout</p>
           </div>
-          <p className="text-slate-500">Taxes and shipping calculated at checkout</p>
+        </div>
+
+        <div className="flex flex-col gap-2">
           <Button label="Checkout" onClick={() => {}} />
           <Link
             href={"/"}
-            className="text-slate-500 flex items-center gap-1 mt-2 cursor-pointer"
+            className="text-slate-500 flex items-center gap-1 cursor-pointer"
           >
             <MdArrowBack />
             <span>Continue shopping</span>
@@ -67,4 +79,6 @@ const CartClient = () => {
 };
 
 export default CartClient;
+
+
 
