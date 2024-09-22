@@ -47,12 +47,15 @@ const CartClient = () => {
 
       <div className="border-t border-slate-200 py-4 flex flex-col gap-4">
         <div className="flex justify-between items-center">
+          <div className="w-32">
+
           <Button
             label="Clear Cart"
             onClick={handleClearCart}
-            custom="w-32"
+            small
             outline
           />
+          </div>
           <div className="text-sm flex flex-col items-start">
             <div className="flex justify-between w-full text-base font-semibold">
               <span>Sub-total</span>
