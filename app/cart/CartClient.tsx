@@ -63,11 +63,14 @@ const CartClient = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-2">
-          <Button label="Checkout" onClick={() => {}} />
+        <div className="flex flex-col gap-2 items-end">
+          <div>
+
+          <Button label="Checkout" custom="md:w-40" onClick={() => {}} />
+          </div>
           <Link
             href={"/"}
-            className="text-slate-500 flex items-center gap-1 cursor-pointer"
+            className="text-slate-500 flex items-center gap-1"
           >
             <MdArrowBack />
             <span>Continue shopping</span>
