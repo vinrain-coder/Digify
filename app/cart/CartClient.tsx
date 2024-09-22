@@ -52,7 +52,7 @@ const CartClient = () => {
             onClick={handleClearCart}
             small
             outline
-            custom="w-32" /* Reduced width */
+            custom="w-32" 
           />
           <div className="text-sm flex flex-col items-start">
             <div className="flex justify-between w-full text-base font-semibold">
@@ -64,10 +64,7 @@ const CartClient = () => {
         </div>
 
         <div className="flex flex-col gap-2 items-end">
-          <div>
-
           <Button label="Checkout" custom="md:w-40" onClick={() => {}} />
-          </div>
           <Link
             href={"/"}
             className="text-slate-500 flex items-center gap-1"
