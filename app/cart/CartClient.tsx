@@ -45,8 +45,8 @@ const CartClient = () => {
         ))}
       </div>
 
-      <div className="border-t border-slate-200 py-4 flex flex-col gap-4">
-        <div className="flex justify-between items-center gap-2">
+      <div className="border border-slate-200 py-4 flex flex-col gap-4">
+        <div className="flex justify-between items-center">
           <Button
             label="Clear Cart"
             onClick={handleClearCart}
