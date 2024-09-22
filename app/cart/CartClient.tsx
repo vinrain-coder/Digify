@@ -50,9 +50,8 @@ const CartClient = () => {
           <Button
             label="Clear Cart"
             onClick={handleClearCart}
-            small
+            custom="w-32"
             outline
-            custom="w-32" 
           />
           <div className="text-sm flex flex-col items-start">
             <div className="flex justify-between w-full text-base font-semibold">
