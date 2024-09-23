@@ -17,7 +17,7 @@ interface RegisterFormProps {
   currentUser: SafeUser | null;
 }
 
-const RegisterForm:React.FC<RegisterFormProps> = ({currentUser}) => {
+const RegisterForm: React.FC<RegisterFormProps> = ({ currentUser }) => {
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -38,7 +38,7 @@ const RegisterForm:React.FC<RegisterFormProps> = ({currentUser}) => {
       router.push("/cart");
       router.refresh();
     }
-  }, []);
+  }, [currentUser, router]);
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
@@ -70,19 +70,33 @@ const RegisterForm:React.FC<RegisterFormProps> = ({currentUser}) => {
       });
   };
 
-  if (currentUser) {
-    return <p className="text-center">Loged in. Redirecting...</p>;
-  }
+  const handleGoogleSignIn = () => {
+    setIsLoading(true);
+    signIn("google", { redirect: false }).then((callback) => {
+      setIsLoading(false);
+      if (callback?.ok) {
+        toast.success("Logged In with Google");
+        router.push("/cart");
+        router.refresh();
+      } else if (callback?.error) {
+        toast.error(callback.error);
+      }
+    });
+  };
 
+  if (currentUser) {
+    return <p className="text-center">Logged in. Redirecting...</p>;
+  }
 
   return (
     <>
-      <Heading title="Sign up for shoepedi" />
+      <Heading title="Sign up for Shoepedi" />
       <Button
         outline
-        label="Sign up with Google"
+        label="Continue with Google"
         icon={AiOutlineGoogle}
-        onClick={() => {}}
+        onClick={handleGoogleSignIn}
+        disabled={isLoading}
       />
       <hr className="bg-slate-300 w-full h-px" />
       <Input
@@ -111,8 +125,9 @@ const RegisterForm:React.FC<RegisterFormProps> = ({currentUser}) => {
         type="password"
       />
       <Button
-        label={isLoading ? "Loading" : "Sign Up"}
+        label={isLoading ? "Loading..." : "Sign Up"}
         onClick={handleSubmit(onSubmit)}
+        disabled={isLoading}
       />
       <p className="text-sm">
         Already have an account?{" "}
@@ -125,3 +140,4 @@ const RegisterForm:React.FC<RegisterFormProps> = ({currentUser}) => {
 };
 
 export default RegisterForm;
+

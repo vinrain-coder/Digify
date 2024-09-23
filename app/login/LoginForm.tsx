@@ -36,7 +36,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ currentUser }) => {
       router.push("/cart");
       router.refresh();
     }
-  }, []);
+  }, [currentUser, router]);
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
@@ -58,8 +58,23 @@ const LoginForm: React.FC<LoginFormProps> = ({ currentUser }) => {
     });
   };
 
+  const handleGoogleSignIn = () => {
+    setIsLoading(true);
+    signIn("google", { redirect: false }).then((callback) => {
+      setIsLoading(false);
+
+      if (callback?.ok) {
+        router.push("/cart");
+        router.refresh();
+        toast.success("Logged in with Google");
+      } else if (callback?.error) {
+        toast.error(callback.error);
+      }
+    });
+  };
+
   if (currentUser) {
-    return <p className="text-center">Loged in. Redirecting...</p>;
+    return <p className="text-center">Logged in. Redirecting...</p>;
   }
 
   return (
@@ -67,9 +82,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ currentUser }) => {
       <Heading title="Sign in to Shoepedi" />
       <Button
         outline
-        label="Continue with Google"
+        label={isLoading ? "Loading..." : "Continue with Google"}
         icon={AiOutlineGoogle}
-        onClick={() => {}}
+        onClick={handleGoogleSignIn}
+        disabled={isLoading}
       />
       <hr className="bg-slate-300 w-full h-px" />
       <Input
@@ -90,8 +106,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ currentUser }) => {
         type="password"
       />
       <Button
-        label={isLoading ? "Loading" : "Sign Up"}
+        label={isLoading ? "Loading..." : "Sign In"}
         onClick={handleSubmit(onSubmit)}
+        disabled={isLoading}
       />
       <p className="text-sm">
         Do not have an account?{" "}
@@ -104,3 +121,4 @@ const LoginForm: React.FC<LoginFormProps> = ({ currentUser }) => {
 };
 
 export default LoginForm;
+
