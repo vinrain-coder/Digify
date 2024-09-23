@@ -21,4 +21,3 @@ const CartCount = () => {
 };
 
 export default CartCount;
-
