@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Heading from "../components/Heading";
 import Input from "../components/inputs/Input";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
@@ -116,9 +116,16 @@ const LoginForm: React.FC<LoginFormProps> = ({ currentUser }) => {
           Sign up
         </Link>
       </p>
+      <p className="text-sm">
+        Forgot your password?{" "}
+        <Link className="underline" href="/resetpassword">
+          Reset it here
+        </Link>
+      </p>
     </>
   );
 };
 
 export default LoginForm;
+
 

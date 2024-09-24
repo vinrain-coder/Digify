@@ -8,20 +8,25 @@ generator client {
 }
  
 model User {
-  id              String          @id @default(auto()) @map("_id") @db.ObjectId
-  name            String?
-  email           String?         @unique
-  emailVerified   DateTime?
-  image           String?
-  hashedPassword  String?
-  role            Role            @default(USER)
-  accounts        Account[]
-  sessions        Session[]
-  Authenticator   Authenticator[]
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  name              String?
+  email             String?         @unique
+  emailVerified     DateTime?
+  isVerified        Boolean         @default(false)
+  image             String?
+  hashedPassword    String?
+  role              Role            @default(USER)
+  accounts          Account[]
+  sessions          Session[]
+  Authenticator     Authenticator[]
+  resetToken        String?         // Removed the @unique constraint
+  resetTokenExpiry  DateTime?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  verificationToken  String?         @unique
 }
- 
+
+
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
   userId            String  @db.ObjectId
@@ -76,3 +81,4 @@ enum Role {
   USER
   ADMIN
 }
+
