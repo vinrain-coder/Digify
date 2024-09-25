@@ -16,107 +16,102 @@ type CartContextType = {
 export const CartContext = createContext<CartContextType | null>(null);
 
 interface Props {
-  [propName: string]: any;
+  children: React.ReactNode;
 }
 
-export const CartContextProvider = (props: Props) => {
+export const CartContextProvider: React.FC<Props> = ({ children }) => {
   const [cartTotalQty, setCartTotalQty] = useState(0);
   const [cartTotalAmount, setCartTotalAmount] = useState(0);
-  const [cartProducts, setCartProduct] = useState<CartProductType[] | null>(null);
+  const [cartProducts, setCartProducts] = useState<CartProductType[]>([]); // Initialize as an empty array
 
+  // Load cart items from local storage
   useEffect(() => {
     const cartItems = localStorage.getItem("ShoepediCartItems");
-    const cartProducts: CartProductType[] | null = cartItems ? JSON.parse(cartItems) : null;
-    setCartProduct(cartProducts);
+    if (cartItems) {
+      const parsedItems: CartProductType[] = JSON.parse(cartItems);
+      setCartProducts(parsedItems);
+    }
   }, []);
 
+  // Calculate total quantity and amount whenever cartProducts change
   useEffect(() => {
-    const getTotals = () => {
-      if (cartProducts) {
-        const { total, qty } = cartProducts.reduce(
-          (acc, item) => {
-            const itemTotal = item.price * item.quantity;
-            acc.total += itemTotal;
-            acc.qty += item.quantity;
-            return acc;
-          },
-          { total: 0, qty: 0 }
-        );
-        setCartTotalQty(qty);
-        setCartTotalAmount(total);
-      }
-    };
-    getTotals();
+    const { total, qty } = cartProducts.reduce(
+      (acc, item) => {
+        acc.total += item.price * item.quantity;
+        acc.qty += item.quantity;
+        return acc;
+      },
+      { total: 0, qty: 0 }
+    );
+
+    setCartTotalQty(qty);
+    setCartTotalAmount(total);
   }, [cartProducts]);
 
   const handleAddProductToCart = useCallback((product: CartProductType) => {
-    setCartProduct((prev) => {
-      const updatedCart = prev ? [...prev, product] : [product];
+    setCartProducts((prev) => {
+      const existingProduct = prev.find(item => item.id === product.id);
+      const updatedCart = existingProduct 
+        ? prev.map(item => 
+            item.id === product.id 
+              ? { ...item, quantity: item.quantity + 1 } 
+              : item
+          ) 
+        : [...prev, { ...product, quantity: 1 }];
+      
+      localStorage.setItem("ShoepediCartItems", JSON.stringify(updatedCart));
+      toast.success("Product added to cart");
+      return updatedCart;
+    });
+  }, []);
+
+  const handleRemoveProductFromCart = useCallback((product: CartProductType) => {
+    setCartProducts((prev) => {
+      const filteredProducts = prev.filter((item) => item.id !== product.id);
+      localStorage.setItem("ShoepediCartItems", JSON.stringify(filteredProducts));
+      toast.success("Product removed");
+      return filteredProducts;
+    });
+  }, []);
+
+  const handleCartQuantityIncrease = useCallback((product: CartProductType) => {
+    setCartProducts((prev) => {
+      const updatedCart = prev.map(item => {
+        if (item.id === product.id) {
+          if (item.quantity < 20) {
+            return { ...item, quantity: item.quantity + 1 };
+          }
+          toast.error("Oops! Maximum reached");
+        }
+        return item;
+      });
       localStorage.setItem("ShoepediCartItems", JSON.stringify(updatedCart));
       return updatedCart;
     });
-    toast.success("Product added to cart");
   }, []);
 
-  const handleRemoveProductFromCart = useCallback(
-    (product: CartProductType) => {
-      if (cartProducts) {
-        const filteredProducts = cartProducts.filter((item) => item.id !== product.id);
-        setCartProduct(filteredProducts);
-        localStorage.setItem("ShoepediCartItems", JSON.stringify(filteredProducts));
-        toast.success("Product removed");
-      }
-    },
-    [cartProducts]
-  );
-
-  const handleCartQuantityIncrease = useCallback(
-    (product: CartProductType) => {
-      if (cartProducts) {
-        const updatedCart = [...cartProducts];
-        const existingIndex = cartProducts.findIndex((item) => item.id === product.id);
-
-        if (existingIndex > -1) {
-          if (updatedCart[existingIndex].quantity === 20) {
-            return toast.error("Oops! Maximum reached");
+  const handleCartQuantityDecrease = useCallback((product: CartProductType) => {
+    setCartProducts((prev) => {
+      const updatedCart = prev.map(item => {
+        if (item.id === product.id) {
+          if (item.quantity > 1) {
+            return { ...item, quantity: item.quantity - 1 };
           }
-
-          updatedCart[existingIndex].quantity += 1;
-          setCartProduct(updatedCart);
-          localStorage.setItem("ShoepediCartItems", JSON.stringify(updatedCart));
-          toast.success("Product quantity increased");
+          toast.error("Oops! Minimum reached");
         }
-      }
-    },
-    [cartProducts]
-  );
-
-  const handleCartQuantityDecrease = useCallback(
-    (product: CartProductType) => {
-      if (cartProducts) {
-        const updatedCart = [...cartProducts];
-        const existingIndex = cartProducts.findIndex((item) => item.id === product.id);
-
-        if (existingIndex > -1) {
-          if (updatedCart[existingIndex].quantity === 1) {
-            return toast.error("Oops! Minimum reached");
-          }
-
-          updatedCart[existingIndex].quantity -= 1;
-          setCartProduct(updatedCart);
-          localStorage.setItem("ShoepediCartItems", JSON.stringify(updatedCart));
-          toast.success("Product quantity decreased");
-        }
-      }
-    },
-    [cartProducts]
-  );
+        return item;
+      });
+      localStorage.setItem("ShoepediCartItems", JSON.stringify(updatedCart));
+      return updatedCart;
+    });
+  }, []);
 
   const handleClearCart = useCallback(() => {
-    setCartProduct(null);
+    setCartProducts([]);
     setCartTotalQty(0);
     setCartTotalAmount(0);
     localStorage.setItem("ShoepediCartItems", JSON.stringify([]));
+    toast.success("Cart cleared");
   }, []);
 
   const value = {
@@ -130,9 +125,10 @@ export const CartContextProvider = (props: Props) => {
     handleClearCart,
   };
 
-  return <CartContext.Provider value={value} {...props} />;
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
 
+// Custom hook to use the cart context
 export const useCart = () => {
   const context = useContext(CartContext);
   if (context === null) {
@@ -140,4 +136,5 @@ export const useCart = () => {
   }
   return context;
 };
+
 

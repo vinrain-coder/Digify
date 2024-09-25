@@ -1,24 +1,20 @@
 import bcrypt from 'bcrypt';
 import prisma from '@/libs/prismadb';
 import { NextResponse } from 'next/server';
-import { randomBytes } from 'crypto'; // Use crypto to generate a unique token
-import { sendVerificationEmail } from '@/utils/sendEmail';
+import { randomBytes } from 'crypto';
+import { sendVerificationEmail } from '@/libs/emailService'; // Ensure it's imported correctly
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { name, email, password } = body;
+    const { name, email, password } = await request.json();
 
-    // Validate required fields
     if (!name || !email || !password) {
-      console.error('Validation failed: Missing required fields');
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     // Check if the email is already registered
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
-      console.error('Email already registered:', email);
       return NextResponse.json({ error: 'Email already registered' }, { status: 400 });
     }
 
@@ -26,9 +22,7 @@ export async function POST(request: Request) {
     const hashedPassword = await bcrypt.hash(password, 10);
     const verificationToken = randomBytes(32).toString('hex'); // Generate unique token
 
-    console.log('Creating user with email:', email);
-
-    // Create a new user with the verification token
+    // Create a new user
     const user = await prisma.user.create({
       data: {
         name,
@@ -39,13 +33,16 @@ export async function POST(request: Request) {
       },
       select: {
         email: true,
-        id: true,
+        id: true, // Ensure email and id are selected
       },
     });
 
-    if (!user || !user.email) {
-      console.error('User creation failed:', user);
-      return NextResponse.json({ error: 'User creation failed or email not found' }, { status: 500 });
+    console.log('Created user:', user); // Log the user object to debug
+
+    // Ensure email exists before sending verification
+    if (!user.email) {
+      console.error('User email not found:', user);
+      return NextResponse.json({ error: 'Failed to find email for verification' }, { status: 500 });
     }
 
     // Send verification email

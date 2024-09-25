@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Heading from "../components/Heading";
-import Input from "../components/inputs/Input";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import Button from "../components/Button";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import Heading from "../components/Heading";
+import Input from "../components/inputs/Input";
+import Button from "../components/Button";
+import Link from "next/link";
 import { SafeUser } from "@/types";
 
 interface RegisterFormProps {
@@ -17,19 +17,15 @@ interface RegisterFormProps {
 
 const RegisterForm: React.FC<RegisterFormProps> = ({ currentUser }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FieldValues>({
+  const router = useRouter();
+
+  const { register, handleSubmit, formState: { errors } } = useForm<FieldValues>({
     defaultValues: {
       name: "",
       email: "",
       password: "",
     },
   });
-
-  const router = useRouter();
 
   useEffect(() => {
     if (currentUser) {
@@ -40,75 +36,41 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ currentUser }) => {
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);
-  
     try {
-      // Send registration data to the API
-      await axios.post("/api/register", data);
-      toast.success("Account created! Please check your email to verify your account.");
-  
-      // Redirect to login page or any other page after registration
-      router.push("/login");
-    } catch (error) {
-      console.log("Registration error:", error); // Log the error to see the details
-  
-      if (axios.isAxiosError(error) && error.response?.status === 400) {
-        toast.error(error.response.data.error);
+      const response = await axios.post("/api/register", data);
+      if (response.status === 200) {
+        toast.success(response.data.message || "Registration successful! Please verify your email.");
+        router.push("/login");
       } else {
-        toast.error("Something went wrong during registration.");
+        throw new Error(response.data.error || "Registration failed");
       }
+    } catch (error: any) {
+      // Use optional chaining to handle cases where response is undefined
+      const errorMessage = error?.response?.data?.error || "Something went wrong during registration.";
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
   };
-  
 
-  if (currentUser) {
-    return <p className="text-center">Logged in. Redirecting...</p>;
-  }
-
-  return (
+  return currentUser ? (
+    <p className="text-center">Logged in. Redirecting...</p>
+  ) : (
     <>
       <Heading title="Sign up for Shoepedi" />
       <hr className="bg-slate-300 w-full h-px" />
-      <Input
-        id="name"
-        label="Name"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-      />
-      <Input
-        id="email"
-        label="Email"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-      />
-      <Input
-        id="password"
-        label="Password"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-        type="password"
-      />
-      <Button
-        label={isLoading ? "Loading..." : "Sign Up"}
-        onClick={handleSubmit(onSubmit)}
-        disabled={isLoading}
-      />
+      <Input id="name" label="Name" disabled={isLoading} register={register} errors={errors} required />
+      <Input id="email" label="Email" disabled={isLoading} register={register} errors={errors} required />
+      <Input id="password" label="Password" disabled={isLoading} register={register} errors={errors} required type="password" />
+      <Button label={isLoading ? "Loading..." : "Sign Up"} onClick={handleSubmit(onSubmit)} disabled={isLoading} />
       <p className="text-sm">
         Already have an account?{" "}
-        <Link className="underline" href="/login">
-          Login
-        </Link>
+        <Link className="underline" href="/login">Login</Link>
       </p>
     </>
   );
 };
 
 export default RegisterForm;
+
 

@@ -6,7 +6,6 @@ import Input from "../components/inputs/Input";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import Button from "../components/Button";
 import Link from "next/link";
-import { AiOutlineGoogle } from "react-icons/ai";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -38,39 +37,28 @@ const LoginForm: React.FC<LoginFormProps> = ({ currentUser }) => {
     }
   }, [currentUser, router]);
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);
-    signIn("credentials", {
-      ...data,
-      redirect: false,
-    }).then((callback) => {
+
+    try {
+      const callback = await signIn("credentials", {
+        ...data,
+        redirect: false,
+      });
+
       setIsLoading(false);
 
       if (callback?.ok) {
         router.push("/cart");
         router.refresh();
         toast.success("Logged In");
-      }
-
-      if (callback?.error) {
-        toast.error(callback.error);
-      }
-    });
-  };
-
-  const handleGoogleSignIn = () => {
-    setIsLoading(true);
-    signIn("google", { redirect: false }).then((callback) => {
-      setIsLoading(false);
-
-      if (callback?.ok) {
-        router.push("/cart");
-        router.refresh();
-        toast.success("Logged in with Google");
       } else if (callback?.error) {
-        toast.error(callback.error);
+        toast.error(callback.error || "Failed to log in.");
       }
-    });
+    } catch (error) {
+      setIsLoading(false);
+      toast.error("An error occurred during login.");
+    }
   };
 
   if (currentUser) {
@@ -80,13 +68,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ currentUser }) => {
   return (
     <>
       <Heading title="Sign in to Shoepedi" />
-      <Button
-        outline
-        label={isLoading ? "Loading..." : "Continue with Google"}
-        icon={AiOutlineGoogle}
-        onClick={handleGoogleSignIn}
-        disabled={isLoading}
-      />
       <hr className="bg-slate-300 w-full h-px" />
       <Input
         id="email"
