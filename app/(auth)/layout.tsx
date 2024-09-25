@@ -1,8 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-import NavBar from "./components/nav/NavBar";
-import Footer from "./components/footer/Footer";
 import CartProvider from "@/providers/CartProvider";
 import { Toaster } from "react-hot-toast";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -33,9 +31,7 @@ export default async function RootLayout({
           />
           <CartProvider>
             <div className="flex flex-col min-h-screen">
-              <NavBar />
               <main className="flex-grow">{children}</main>
-              <Footer />
             </div>
           </CartProvider>
         </body>
