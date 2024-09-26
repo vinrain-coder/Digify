@@ -5,7 +5,6 @@ import NavBar from "./components/nav/NavBar";
 import Footer from "./components/footer/Footer";
 import CartProvider from "@/providers/CartProvider";
 import { Toaster } from "react-hot-toast";
-import { ClerkProvider } from "@clerk/nextjs";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["400", "700"] });
 
@@ -20,7 +19,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
+    
       <html lang="en">
         <body className={`${poppins.className} text-slate-700`}>
           <Toaster
@@ -40,6 +39,5 @@ export default async function RootLayout({
           </CartProvider>
         </body>
       </html>
-    </ClerkProvider>
   );
 }
