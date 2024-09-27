@@ -2,11 +2,11 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
- 
+
 generator client {
   provider = "prisma-client-js"
 }
- 
+
 model User {
   id                String          @id @default(auto()) @map("_id") @db.ObjectId
   name              String?
@@ -16,69 +16,71 @@ model User {
   image             String?
   hashedPassword    String?
   role              Role            @default(USER)
-  accounts          Account[]
-  sessions          Session[]
-  Authenticator     Authenticator[]
-  resetToken        String?         // Removed the @unique constraint
+  resetToken        String?         
   resetTokenExpiry  DateTime?
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @updatedAt
-  verificationToken  String?         @unique
-}
-
-
-model Account {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String  @db.ObjectId
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.String
-  access_token      String? @db.String
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.String
-  session_state     String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  @@unique([provider, providerAccountId])
-}
- 
-model Session {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  sessionToken String   @unique
-  userId       String   @db.ObjectId
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-}
- 
-model VerificationToken {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  identifier String
-  token      String
-  expires    DateTime
-  @@unique([identifier, token])
-}
- 
-model Authenticator {
-  credentialID         String  @id @map("_id")
-  userId               String  @db.ObjectId
-  providerAccountId    String
-  credentialPublicKey  String
-  counter              Int
-  credentialDeviceType String
-  credentialBackedUp   Boolean
-  transports           String?
-  user                 User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  @@unique([userId, credentialID])
+  verificationToken String?         @unique
+  reviews           Review[]
 }
 
 enum Role {
   USER
   ADMIN
+}
+
+model Product {
+  id              String           @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  description     String
+  price           Float
+  brand           String
+  category        String
+  inStock         Boolean
+  images          Image[]          // Embedded array of images
+  reviews         Review[]
+  productVariants ProductVariant[] // Relation to the ProductVariant model
+}
+
+type Image {
+  color     String
+  colorCode String
+  imageUrl  String // Ensure the field name matches what's used in the API
+}
+
+model ProductVariant {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String     @db.ObjectId
+  size      Size       @relation(fields: [sizeId], references: [id])
+  sizeId    String     @db.ObjectId
+  color     Color      @relation(fields: [colorId], references: [id])
+  colorId   String     @db.ObjectId
+  quantity  Int        // Available quantity for this combination of size and color
+}
+
+model Size {
+  id    String   @id @default(auto()) @map("_id") @db.ObjectId
+  value String   // e.g., "39", "40", "41", etc.
+  products ProductVariant[]  // Relation to ProductVariant
+}
+
+model Color {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String   // e.g., "Red", "Blue", etc.
+  colorCode String   // e.g., "#FF0000"
+  products  ProductVariant[]  // Relation to ProductVariant
+}
+
+model Review {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  productId   String   @db.ObjectId
+  rating      Int
+  comment     String
+  createdDate DateTime @default(now())
+
+  Product     Product  @relation(fields: [productId], references: [id])
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
