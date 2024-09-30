@@ -109,7 +109,12 @@ const ManageProductsClient: React.FC<ManageProductsClientProps> = ({
                 handleDelete(params.row.id, params.row.images);
               }}
             />
-            <ActionBtn icon={MdRemoveRedEye} onClick={() => {}} />
+            <ActionBtn
+              icon={MdRemoveRedEye}
+              onClick={() => {
+                router.push(`product/${params.row.id}`);
+              }}
+            />
           </div>
         );
       },
