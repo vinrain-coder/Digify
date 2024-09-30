@@ -30,16 +30,16 @@ enum Role {
 }
 
 model Product {
-  id              String           @id @default(auto()) @map("_id") @db.ObjectId
-  name            String
-  description     String
-  price           Float
-  brand           String
-  category        String
-  inStock         Boolean
-  images          Image[]          // Embedded array of images
-  reviews         Review[]
-  productVariants ProductVariant[] // Relation to the ProductVariant model
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  price       Float
+  brand       String
+  category    String
+  inStock     Boolean
+  images       Image[]   // Embedded array of images
+  reviews     Review[]
+  sizes       Size[]     // Embedding sizes directly as an array of objects
 }
 
 type Image {
@@ -48,28 +48,8 @@ type Image {
   imageUrl  String // Ensure the field name matches what's used in the API
 }
 
-model ProductVariant {
-  id        String     @id @default(auto()) @map("_id") @db.ObjectId
-  product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId String     @db.ObjectId
-  size      Size       @relation(fields: [sizeId], references: [id])
-  sizeId    String     @db.ObjectId
-  color     Color      @relation(fields: [colorId], references: [id])
-  colorId   String     @db.ObjectId
-  quantity  Int        // Available quantity for this combination of size and color
-}
-
-model Size {
-  id    String   @id @default(auto()) @map("_id") @db.ObjectId
-  value String   // e.g., "39", "40", "41", etc.
-  products ProductVariant[]  // Relation to ProductVariant
-}
-
-model Color {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String   // e.g., "Red", "Blue", etc.
-  colorCode String   // e.g., "#FF0000"
-  products  ProductVariant[]  // Relation to ProductVariant
+type Size {
+  size   String   // Size value (e.g., "39", "40", "41")
 }
 
 model Review {
@@ -83,4 +63,3 @@ model Review {
   Product     Product  @relation(fields: [productId], references: [id])
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
-
