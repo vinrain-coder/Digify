@@ -26,6 +26,7 @@ export async function getCurrentUser() {
       where: {
         email: session.user.email,
       },
+      // include: { orders: true },
     });
 
     // If user is not found, return null

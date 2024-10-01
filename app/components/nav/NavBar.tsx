@@ -4,11 +4,12 @@ import { Redressed } from "next/font/google";
 import CartCount from "./CartCount";
 import UserMenu from "./UserMenu";
 import { getCurrentUser } from "@/actions/getCurrentUser";
+import Categories from "./Categories";
 
 const redressed = Redressed({ subsets: ["latin"], weight: ["400"] });
 
 const NavBar = async () => {
-const currentUser=await getCurrentUser()
+  const currentUser = await getCurrentUser();
 
   return (
     <div
@@ -34,14 +35,14 @@ const currentUser=await getCurrentUser()
               <button className="text-gray-700 hover:text-indigo-600 transition font-semibold">
                 Wishlist
               </button>
-              
-                <CartCount/>
-              <UserMenu currentUser={currentUser}/>
-              
+
+              <CartCount />
+              <UserMenu currentUser={currentUser} />
             </div>
           </div>
         </Container>
       </div>
+      <Categories />
     </div>
   );
 };

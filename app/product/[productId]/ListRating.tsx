@@ -11,6 +11,7 @@ interface ListRatingProps {
 }
 
 const ListRating: React.FC<ListRatingProps> = ({ product }) => {
+  if (product.reviews.length === 0) return null;
   const [visibleReviews, setVisibleReviews] = useState(3);
 
   const handleLoadMore = () => {
