@@ -4,19 +4,31 @@ import { formatPrice } from "@/utils/formatPrice";
 import { truncateText } from "@/utils/truncateText";
 import { Rating } from "@mui/material";
 import Image from "next/image";
-
 import { useRouter } from "next/navigation";
 
 interface ProductCardProps {
-  data: any;
+  data: {
+    id: string;
+    name: string;
+    reviews: { rating: number }[];
+    price: number;
+    images: { imageUrl: string }[]; // Update to match your image structure
+  };
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
   const router = useRouter();
 
   const productRating =
-    data.reviews.reduce((acc: number, item: any) => item.rating + acc, 0) /
-    data.reviews.length;
+    data.reviews.length > 0
+      ? data.reviews.reduce(
+          (acc: number, item: { rating: number }) => item.rating + acc,
+          0
+        ) / data.reviews.length
+      : 0; // Handle case where there are no reviews
+
+  const imageUrl =
+    data.images.length > 0 ? data.images[0].imageUrl : "/default-image.jpg"; // Fallback to a default image
 
   return (
     <div
@@ -27,9 +39,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
         <div className="aspect-square overflow-hidden relative w-full">
           <Image
             fill
-            src={data.images[0].image}
+            src={imageUrl}
             alt={data.name}
             className="w-full h-full object-contain"
+            priority // Load images with priority
           />
         </div>
         <div className="mt-4">{truncateText(data.name)}</div>

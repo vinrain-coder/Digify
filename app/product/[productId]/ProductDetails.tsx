@@ -21,8 +21,12 @@ interface ProductDetailsProps {
     description: string;
     category: string;
     brand: string;
-    sizes?: string[]; // Optional sizes prop
-    images?: SelectedImgType[]; // Optional images prop
+    sizes?: { size: string }[]; // Sizes as array of objects with 'size' field
+    images?: {
+      color: string;
+      colorCode: string;
+      imageUrl: string; // Original data has 'imageUrl'
+    }[];
     reviews: { rating: number }[];
     price: number;
     inStock: boolean;
@@ -54,38 +58,45 @@ const Horizontal = () => {
 const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
   const { handleAddProductToCart, cartProducts } = useCart();
   const [isProductInCart, setIsProductInCart] = useState(false);
+
+  // Normalize sizes to ensure it's an array of strings
+  const normalizedSizes = Array.isArray(product.sizes)
+    ? product.sizes.map((sizeObj) => sizeObj.size)
+    : [];
+
+  // Normalize images to match SelectedImgType[]
+  const normalizedImages = Array.isArray(product.images)
+    ? product.images.map((img) => ({
+        color: img.color,
+        colorCode: img.colorCode,
+        image: img.imageUrl, // Rename 'imageUrl' to 'image'
+      }))
+    : [];
+
   const [cartProduct, setCartProduct] = useState<CartProductType>({
     id: product.id,
     name: product.name,
     description: product.description,
     category: product.category,
     brand: product.brand,
-    size: product.sizes?.length ? product.sizes[0] : "",
-    selectedImg: product.images?.length
-      ? product.images[0]
+    size: normalizedSizes.length ? normalizedSizes[0] : "",
+    selectedImg: normalizedImages.length
+      ? normalizedImages[0]
       : { color: "", colorCode: "", image: "" },
     quantity: 1,
     price: product.price,
   });
 
-  const router=useRouter()
-
-  console.log(cartProducts);
+  const router = useRouter();
 
   useEffect(() => {
-    setIsProductInCart(false);
-  
     if (cartProducts && product) {
       const existingIndex = cartProducts.findIndex(
         (item) => item.id === product.id
       );
-  
-      if (existingIndex > -1) {
-        setIsProductInCart(true);
-      }
+      setIsProductInCart(existingIndex > -1);
     }
   }, [cartProducts, product]);
-  
 
   const productRating =
     product.reviews.length > 0
@@ -130,7 +141,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
       {/* Product Image Section */}
       <ProductImage
         cartProduct={cartProduct}
-        product={product}
+        product={{ ...product, images: normalizedImages }} // Pass normalized images
         handleColorSelect={handleColorSelect}
       />
 
@@ -168,29 +179,33 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
 
         {isProductInCart ? (
           <>
-          <p className="mb-2 text-slate-500 flex items-center gap-1">
-            <MdCheckCircle className="text-teal-400" size={20}/>
-            <span> Product added to cart </span>
-          </p>
-          <div className="max-w-[300px]">
-          <Button label="View Cart" outline onClick={() =>{
-            router.push('/cart')
-          }}/>
-          </div>
+            <p className="mb-2 text-slate-500 flex items-center gap-1">
+              <MdCheckCircle className="text-teal-400" size={20} />
+              <span> Product added to cart </span>
+            </p>
+            <div className="max-w-[300px]">
+              <Button
+                label="View Cart"
+                outline
+                onClick={() => {
+                  router.push("/cart");
+                }}
+              />
+            </div>
           </>
         ) : (
           <>
             {/* Color Selector */}
             <SetColor
               cartProduct={cartProduct}
-              images={product.images || []}
+              images={normalizedImages}
               handleColorSelect={handleColorSelect}
             />
             <Horizontal />
 
             {/* Size Selector */}
             <SetSize
-              sizes={product.sizes || []}
+              sizes={normalizedSizes}
               selectedSize={cartProduct.size}
               handleSizeSelect={handleSizeSelect}
             />
