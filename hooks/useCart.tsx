@@ -1,5 +1,5 @@
 import { CartProductType } from "@/app/product/[productId]/ProductDetails";
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 type CartContextType = {
@@ -23,6 +23,7 @@ export const CartContextProvider: React.FC<Props> = ({ children }) => {
   const [cartTotalQty, setCartTotalQty] = useState(0);
   const [cartTotalAmount, setCartTotalAmount] = useState(0);
   const [cartProducts, setCartProducts] = useState<CartProductType[]>([]); // Initialize as an empty array
+  const [toastMessage, setToastMessage] = useState<string | null>(null); // State to control toast messages
 
   // Load cart items from local storage
   useEffect(() => {
@@ -48,6 +49,15 @@ export const CartContextProvider: React.FC<Props> = ({ children }) => {
     setCartTotalAmount(total);
   }, [cartProducts]);
 
+  // Show toast when there's a new message
+  useEffect(() => {
+    if (toastMessage) {
+      toast.success(toastMessage);
+      const timer = setTimeout(() => setToastMessage(null), 2000); // Reset toastMessage after 2 seconds
+      return () => clearTimeout(timer); // Cleanup timeout
+    }
+  }, [toastMessage]);
+
   const handleAddProductToCart = useCallback((product: CartProductType) => {
     setCartProducts((prev) => {
       const existingProduct = prev.find(item => item.id === product.id);
@@ -58,9 +68,9 @@ export const CartContextProvider: React.FC<Props> = ({ children }) => {
               : item
           ) 
         : [...prev, { ...product, quantity: 1 }];
-      
+
       localStorage.setItem("ShoepediCartItems", JSON.stringify(updatedCart));
-      toast.success("Product added to cart");
+      setToastMessage("Product added to cart"); // Set toast message
       return updatedCart;
     });
   }, []);
@@ -69,7 +79,7 @@ export const CartContextProvider: React.FC<Props> = ({ children }) => {
     setCartProducts((prev) => {
       const filteredProducts = prev.filter((item) => item.id !== product.id);
       localStorage.setItem("ShoepediCartItems", JSON.stringify(filteredProducts));
-      toast.success("Product removed");
+      setToastMessage("Product removed"); // Set toast message
       return filteredProducts;
     });
   }, []);
@@ -79,9 +89,12 @@ export const CartContextProvider: React.FC<Props> = ({ children }) => {
       const updatedCart = prev.map(item => {
         if (item.id === product.id) {
           if (item.quantity < 20) {
-            return { ...item, quantity: item.quantity + 1 };
+            const newQuantity = item.quantity + 1;
+            setToastMessage("Increased quantity"); // Set toast message
+            return { ...item, quantity: newQuantity };
+          } else {
+            setToastMessage("Oops! Maximum reached"); // Set toast message
           }
-          toast.error("Oops! Maximum reached");
         }
         return item;
       });
@@ -95,9 +108,12 @@ export const CartContextProvider: React.FC<Props> = ({ children }) => {
       const updatedCart = prev.map(item => {
         if (item.id === product.id) {
           if (item.quantity > 1) {
-            return { ...item, quantity: item.quantity - 1 };
+            const newQuantity = item.quantity - 1;
+            setToastMessage("Decreased quantity"); // Set toast message
+            return { ...item, quantity: newQuantity };
+          } else {
+            setToastMessage("Oops! Minimum reached"); // Set toast message
           }
-          toast.error("Oops! Minimum reached");
         }
         return item;
       });
@@ -111,7 +127,7 @@ export const CartContextProvider: React.FC<Props> = ({ children }) => {
     setCartTotalQty(0);
     setCartTotalAmount(0);
     localStorage.setItem("ShoepediCartItems", JSON.stringify([]));
-    toast.success("Cart cleared");
+    setToastMessage("Cart cleared"); // Set toast message
   }, []);
 
   const value = {
@@ -135,6 +151,4 @@ export const useCart = () => {
     throw new Error("useCart must be used within a CartContextProvider");
   }
   return context;
-};
-
-
+};   

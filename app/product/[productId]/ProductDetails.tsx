@@ -1,5 +1,3 @@
-// src/app/components/products/ProductDetails.tsx
-
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
@@ -223,8 +221,9 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
             <div className="max-w-[300px]">
               <Button
                 outline
-                label="Add to Cart"
-                onClick={() => handleAddProductToCart(cartProduct)}
+                label={product.inStock ? "Add to Cart" : "Out of Stock"} // Change label if out of stock
+                onClick={() => product.inStock && handleAddProductToCart(cartProduct)}
+                disabled={!product.inStock} // Disable button if out of stock
               />
             </div>
           </>
@@ -235,3 +234,4 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
 };
 
 export default ProductDetails;
+

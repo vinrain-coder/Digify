@@ -8,14 +8,13 @@ export interface IProductParams {
 export default async function getProducts(params: IProductParams) {
   try {
     const { category, searchTerm } = params;
-    let searchString = searchTerm;
 
-    if (!searchTerm) {
-      searchString = "";
-    }
+    // Ensure searchTerm is at least 3 characters long
+    let searchString = searchTerm && searchTerm.trim().length >= 3 ? searchTerm.trim() : "";
 
     let query: any = {};
 
+    // If category is provided, include it in the query
     if (category) {
       query.category = category;
     }
@@ -23,18 +22,22 @@ export default async function getProducts(params: IProductParams) {
     const products = await prisma.product.findMany({
       where: {
         ...query,
-        OR: [
-          {
-            name: {
-              contains: searchString,
-              mode: "insensitive",
-            },
-            description: {
-              contains: searchString,
-              mode: "insensitive",
-            },
-          },
-        ],
+        OR: searchString
+          ? [
+              {
+                name: {
+                  contains: searchString, // Search by name
+                  mode: "insensitive", // Case-insensitive search
+                },
+              },
+              {
+                description: {
+                  contains: searchString, // Search by description
+                  mode: "insensitive", // Case-insensitive search
+                },
+              },
+            ]
+          : undefined,
       },
       include: {
         reviews: {
