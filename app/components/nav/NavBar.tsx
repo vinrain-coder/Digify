@@ -5,6 +5,7 @@ import CartCount from "./CartCount";
 import UserMenu from "./UserMenu";
 import { getCurrentUser } from "@/actions/getCurrentUser";
 import Categories from "./Categories";
+import SearchBar from "./SearchBar";
 
 const redressed = Redressed({ subsets: ["latin"], weight: ["400"] });
 
@@ -32,6 +33,9 @@ const NavBar = async () => {
               Shoepedi
             </Link>
             <div className="flex items-center gap-6 md:gap-12">
+              <div className="hidden md:block">
+                <SearchBar />
+              </div>
               <button className="text-gray-700 hover:text-indigo-600 transition font-semibold">
                 Wishlist
               </button>
