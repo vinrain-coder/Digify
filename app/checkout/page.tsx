@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { useState } from "react";
 import Container from "../components/Container";
@@ -11,7 +11,7 @@ import AddressForm from "./AddressForm";
 import ShippingOptions from "./ShippingOptions";
 import OrderSummary from "./OrderSummary";
 import PaymentOptions from "./PaymentOptions";
-import SelectedLocation from "./SelectedLocation"; // Import SelectedLocation component
+import GrandTotal from "./GrandTotal";
 
 const Checkout = () => {
   const { cartProducts, cartTotalAmount } = useCart();
@@ -61,6 +61,11 @@ const Checkout = () => {
             />
           </div>
 
+          {/* Cart Total */}
+          <div className="mb-8">
+            <GrandTotal cartTotalAmount={cartTotalAmount} deliveryCharge={deliveryCharge} />
+          </div>
+
           {/* Payment Options */}
           <div className="mb-8">
             <PaymentOptions />
@@ -80,4 +85,5 @@ const Checkout = () => {
 };
 
 export default Checkout;
+
 

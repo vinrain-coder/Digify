@@ -20,6 +20,7 @@ const AddressForm: React.FC<AddressFormProps> = ({ onSubmit, updateSelectedLocat
       city: "",
       street: "",
       address: "",
+      additionalInfo: "", // Adding default value for the new text area field
     },
   });
 
@@ -40,7 +41,6 @@ const AddressForm: React.FC<AddressFormProps> = ({ onSubmit, updateSelectedLocat
     handleCitySelect,
   } = useAddressForm();
 
-  // Create refs for the county and city input areas
   const countyRef = useRef<HTMLDivElement>(null);
   const cityRef = useRef<HTMLDivElement>(null);
 
@@ -52,9 +52,9 @@ const AddressForm: React.FC<AddressFormProps> = ({ onSubmit, updateSelectedLocat
     setCountyInput(county);
     setValue("county", county);
     updateSelectedLocation(county, selectedCity, deliveryCharge);
-    setShowCountySuggestions(false); // Hide suggestions after selection
-    setCityInput(""); // Clear city input
-    setShowCitySuggestions(true); // Show city suggestions immediately
+    setShowCountySuggestions(false);
+    setCityInput("");
+    setShowCitySuggestions(true);
   };
 
   const onCitySelect = (city: string) => {
@@ -62,7 +62,7 @@ const AddressForm: React.FC<AddressFormProps> = ({ onSubmit, updateSelectedLocat
     setCityInput(city);
     setValue("city", city);
     updateSelectedLocation(selectedCounty, city, deliveryCharge);
-    setShowCitySuggestions(false); // Hide suggestions after selection
+    setShowCitySuggestions(false);
   };
 
   const handleClickOutside = (event: MouseEvent) => {
@@ -75,10 +75,8 @@ const AddressForm: React.FC<AddressFormProps> = ({ onSubmit, updateSelectedLocat
   };
 
   useEffect(() => {
-    // Attach click event listener to document
     document.addEventListener("click", handleClickOutside);
     return () => {
-      // Cleanup listener on component unmount
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
@@ -95,11 +93,11 @@ const AddressForm: React.FC<AddressFormProps> = ({ onSubmit, updateSelectedLocat
           <input
             type="text"
             value={countyInput}
-            onClick={() => setShowCountySuggestions(true)} // Show suggestions on input click
+            onClick={() => setShowCountySuggestions(true)}
             onChange={(e) => {
               setCountyInput(e.target.value);
               handleCountyChange(e.target.value);
-              if (e.target.value) setShowCountySuggestions(true); // Show suggestions when typing
+              if (e.target.value) setShowCountySuggestions(true);
             }}
             className={`w-full p-4 border-2 rounded-md ${
               errors.county ? "border-rose-400" : "border-slate-300"
@@ -128,13 +126,13 @@ const AddressForm: React.FC<AddressFormProps> = ({ onSubmit, updateSelectedLocat
             value={cityInput}
             onClick={() => {
               if (selectedCounty) {
-                setShowCitySuggestions(true); // Show suggestions when county is selected
+                setShowCitySuggestions(true);
               }
-            }} // Show suggestions on input click
+            }}
             onChange={(e) => {
               setCityInput(e.target.value);
               handleCityChange(e.target.value);
-              if (e.target.value) setShowCitySuggestions(true); // Show suggestions when typing
+              if (e.target.value) setShowCitySuggestions(true);
             }}
             className={`w-full p-4 border-2 rounded-md ${
               errors.city ? "border-rose-400" : "border-slate-300"
@@ -171,6 +169,22 @@ const AddressForm: React.FC<AddressFormProps> = ({ onSubmit, updateSelectedLocat
           errors={errors}
         />
 
+        {/* New Text Area Input for Additional Information */}
+        <div>
+          <label htmlFor="additionalInfo" className="block text-sm font-medium text-gray-700">
+            Additional Information (Optional)
+          </label>
+          <textarea
+            id="additionalInfo"
+            {...register("additionalInfo")}
+            rows={4}
+            className={`mt-1 block w-full p-4 border-2 rounded-md ${
+              errors.additionalInfo ? "border-rose-400" : "border-slate-300"
+            }`}
+            placeholder="Any additional delivery instructions or information"
+          />
+        </div>
+
         {/* Display delivery charge dynamically */}
         {deliveryCharge !== null && (
           <div className="mt-4">
@@ -185,3 +199,4 @@ const AddressForm: React.FC<AddressFormProps> = ({ onSubmit, updateSelectedLocat
 };
 
 export default AddressForm;
+
