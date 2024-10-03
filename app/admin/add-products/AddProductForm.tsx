@@ -38,7 +38,7 @@ export type UploadedImageType = {
 
 const AddProductForm = () => {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); 
   const [images, setImages] = useState<ImageType[]>([]); // Initialize as an empty array
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]); // Manage selected sizes
   const [isProductCreated, setIsProductCreated] = useState(false);
