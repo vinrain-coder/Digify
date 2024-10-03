@@ -11,16 +11,27 @@ import AddressForm from "./AddressForm";
 import ShippingOptions from "./ShippingOptions";
 import OrderSummary from "./OrderSummary";
 import PaymentOptions from "./PaymentOptions";
+import SelectedLocation from "./SelectedLocation"; // Import SelectedLocation component
 
 const Checkout = () => {
   const { cartProducts, cartTotalAmount } = useCart();
   const [isLoading, setIsLoading] = useState(false);
+  const [county, setCounty] = useState<string>(""); // State for county
+  const [city, setCity] = useState<string>(""); // State for city
+  const [deliveryCharge, setDeliveryCharge] = useState<number | null>(null); // State for delivery charge
 
   const handleFormSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
     // Process the form data (e.g., send to API)
     console.log("Submitted Data:", data);
     setIsLoading(false);
+  };
+
+  // Function to update selected location
+  const updateSelectedLocation = (county: string, city: string, deliveryCharge: number | null) => {
+    setCounty(county);
+    setCity(city);
+    setDeliveryCharge(deliveryCharge);
   };
 
   return (
@@ -34,7 +45,7 @@ const Checkout = () => {
 
           {/* Address Details */}
           <div className="mb-8">
-            <AddressForm onSubmit={handleFormSubmit} />
+            <AddressForm onSubmit={handleFormSubmit} updateSelectedLocation={updateSelectedLocation} />
           </div>
 
           {/* Shipping Options */}
@@ -69,3 +80,4 @@ const Checkout = () => {
 };
 
 export default Checkout;
+

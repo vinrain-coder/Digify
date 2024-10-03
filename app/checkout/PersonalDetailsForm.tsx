@@ -22,13 +22,13 @@ const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
   });
 
   return (
-    <div className="w-full p-4 border border-gray-200 rounded-lg bg-white shadow-md">
+    <div className="w-full p-4 border border-gray-200 rounded-lg bg-slate-50 shadow-md">
       <h4 className="text-md font-semibold mb-4">Personal Details</h4>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-full md:min-w-[500px] flex flex-col gap-4"
       >
-        <Input
+        <Input 
           id="firstName"
           label="First Name"
           required
@@ -42,7 +42,7 @@ const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
           register={register}
           errors={errors}
         />
-        <Input
+        <Input 
           id="email"
           label="Email"
           type="email"
@@ -53,7 +53,7 @@ const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
         <Input
           id="phone"
           label="Phone Number"
-          type="tel"
+          type="number"
           required
           register={register}
           errors={errors}

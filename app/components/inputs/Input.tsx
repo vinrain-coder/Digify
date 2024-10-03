@@ -10,6 +10,7 @@ interface InputProps {
   required?: boolean;
   register: UseFormRegister<FieldValues>;
   errors: FieldErrors;
+  className?: string;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -20,9 +21,10 @@ const Input: React.FC<InputProps> = ({
   required,
   register,
   errors,
+  className = "",
 }) => {
   return (
-    <div className="w-full relative">
+    <div className={`w-full relative ${className}`}>
       <input
         autoComplete="off"
         id={id}
@@ -55,7 +57,7 @@ const Input: React.FC<InputProps> = ({
       transform
       -translate-y-3
       top-5
-      z-10
+      z-1
       origin-[0]
       left-4
       peer-placeholder-shown:scale-100
