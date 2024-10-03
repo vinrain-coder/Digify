@@ -2,9 +2,9 @@ import React from "react";
 
 const ShippingOptions = () => {
   return (
-    <div className="w-full p-4 border border-gray-200 rounded-lg bg-white shadow-md">
+    <div className="w-full p-4 border border-gray-200 rounded-lg bg-white shadow-md min-w-[350px] md:min-w-[590px]">
       <h4 className="text-md font-semibold mb-4">Shipping Options</h4>
-      <div className="w-full flex flex-col md:flex-row justify-between items-center gap-4 p-4 border border-gray-200 rounded-lg bg-white shadow-md">
+      <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-4 border border-gray-200 rounded-lg bg-white shadow-md">
         <div className="flex items-center space-x-2">
           <input
             type="radio"

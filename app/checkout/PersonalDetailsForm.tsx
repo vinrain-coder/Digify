@@ -22,7 +22,7 @@ const PersonalDetailsForm: React.FC<PersonalDetailsFormProps> = ({
   });
 
   return (
-    <div className="w-full p-4 border border-gray-200 rounded-lg bg-slate-50 shadow-md">
+    <div className="w-full p-4 border border-gray-200 rounded-lg bg-slate-50 shadow-md min-w-[350px] md:min-w-[590px]">
       <h4 className="text-md font-semibold mb-4">Personal Details</h4>
       <form
         onSubmit={handleSubmit(onSubmit)}
