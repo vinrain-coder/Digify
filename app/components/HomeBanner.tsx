@@ -8,9 +8,9 @@ import Link from "next/link";
 const HomeBanner: React.FC = () => {
   return (
     <div className="mb-8 bg-gray-100 py-10">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 py-2">
         {/* Responsive layout: carousel on top for small screens, on left for medium and larger screens */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Carousel Section */}
           <div className="w-full">
             <style jsx>{`
@@ -57,9 +57,9 @@ const HomeBanner: React.FC = () => {
                     transition={{ duration: 0.5 }}
                   >
                     <Link href="/shop">
-                      <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg flex items-center justify-between h-[320px]">
-                        <div className="text-left">
-                          <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                      <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-4 rounded-lg flex items-center justify-between h-[200px] md:h-[320px]">
+                        <div className="text-left w-[50%]">
+                          <h2 className="text-xl md:text-2xl font-bold text-white mb-2">
                             Welcome to Our Shop
                           </h2>
                           <p className="text-white text-sm md:text-base">
@@ -86,13 +86,13 @@ const HomeBanner: React.FC = () => {
                     transition={{ duration: 0.5 }}
                   >
                     <Link href="/new-arrivals">
-                      <div className="bg-gradient-to-r from-green-500 to-yellow-600 p-6 rounded-lg flex items-center justify-between h-[320px]">
-                        <div className="text-left">
-                          <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                      <div className="bg-gradient-to-r from-green-500 to-yellow-600 p-4 rounded-lg flex items-center justify-between h-[200px] md:h-[320px]">
+                        <div className="text-left w-[50%]">
+                          <h2 className="text-xl md:text-2xl font-bold text-white mb-2">
                             New Arrivals
                           </h2>
                           <p className="text-white text-sm md:text-base">
-                            Check out our latest collection now.
+                            Check out our latest collection.
                           </p>
                         </div>
                         <div className="w-32 h-32 md:w-48 md:h-48 relative">
@@ -112,7 +112,7 @@ const HomeBanner: React.FC = () => {
           </div>
 
           {/* Static Banners Section */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="hidden md:grid md:grid-cols-2 gap-4 ">
             {[
               {
                 title: "Sale",
@@ -121,7 +121,7 @@ const HomeBanner: React.FC = () => {
                 img: "/banner-image.png",
               },
               {
-                title: "Limited Edition",
+                title: "Limited",
                 description: "Exclusive offers just for you.",
                 bg: "from-indigo-500 to-blue-500",
                 img: "/banner-image.png",
@@ -133,7 +133,7 @@ const HomeBanner: React.FC = () => {
                 img: "/banner-image.png",
               },
               {
-                title: "New Collection",
+                title: "New",
                 description: "Check out our newest arrivals.",
                 bg: "from-purple-500 to-pink-500",
                 img: "/banner-image.png",
@@ -144,21 +144,21 @@ const HomeBanner: React.FC = () => {
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.5 }}
-                  className={`bg-gradient-to-r ${banner.bg} p-6 rounded-lg flex items-center justify-between`}
+                  className={`bg-gradient-to-r ${banner.bg} p-4 rounded-lg flex items-center`}
                 >
-                  <div className="relative h-[104px] flex gap-1">
+                  <div className="relative h-[117px] flex gap-1">
                   <div className="text-left z-10">
-                    <h3 className="text-lg md:text-xl font-semibold text-gray-300 mb-2">
+                    <h3 className="text-lg md:text-xl font-semibold text-gray-300">
                       {banner.title}
                     </h3>
-                    <p className="text-gray-100 font-semibold text-xs">{banner.description}</p>
+                    <p className="text-gray-200 font-semibold text-xs mt-20 line-clamp-1">{banner.description}</p>
                   </div>
-                  <div className="absolute w-24 h-24 md:w-32 md:h-32 right-0">
+                  <div className="absolute w-32 h-32 right-0">
                     <Image
                       src={banner.img}
                       alt={banner.title}
                       fill
-                      className="object-contain ml-8 right-0"
+                      className="object-contain right-0 ml-2 "
                     />
                   </div>
                   </div>
