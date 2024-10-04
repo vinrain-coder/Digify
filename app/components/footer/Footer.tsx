@@ -33,19 +33,19 @@ const Footer = () => {
           
           <FooterList>
             <h3 className="text-lg font-bold text-white mb-4">Customer Service</h3>
-            <Link href="#" className="hover:text-yellow-400 transition-colors">
+            <Link href="/contact" className="hover:text-yellow-400 transition-colors">
               Contact us
             </Link>
-            <Link href="#" className="hover:text-yellow-400 transition-colors">
+            <Link href="/privacy-policy" className="hover:text-yellow-400 transition-colors">
+              Privacy Policy
+            </Link>
+            <Link href="/shipping-policy" className="hover:text-yellow-400 transition-colors">
               Shipping Policy
             </Link>
-            <Link href="#" className="hover:text-yellow-400 transition-colors">
-              Returns and Exchanges
+            <Link href="return-policy" className="hover:text-yellow-400 transition-colors">
+              Return Policy
             </Link>
-            <Link href="#" className="hover:text-yellow-400 transition-colors">
-              Sneakers
-            </Link>
-            <Link href="#" className="hover:text-yellow-400 transition-colors">
+            <Link href="/faqs" className="hover:text-yellow-400 transition-colors">
               FAQs
             </Link>
           </FooterList>
