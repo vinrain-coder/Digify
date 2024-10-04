@@ -61,7 +61,7 @@ const Checkout = () => {
             />
           </div>
 
-          {/* Cart Total */}
+          {/* Grand Total */}
           <div className="mb-8">
             <GrandTotal cartTotalAmount={cartTotalAmount} deliveryCharge={deliveryCharge} />
           </div>

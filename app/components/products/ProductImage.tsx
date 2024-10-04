@@ -20,7 +20,7 @@ const ProductImage: React.FC<ProductImageProps> = ({
   handleColorSelect,
 }) => {
   return (
-    <div className="flex flex-col lg:flex-row gap-4">
+    <div className="flex flex-col lg:flex-row max-h-[600px] gap-4 border border-slate-200 rounded-lg px-2">
       <div className="flex flex-col gap-4 w-full lg:w-3/5">
         <div className="relative w-full h-[350px] sm:h-[450px] md:h-[550px] lg:h-[600px]">
           <Zoom>
