@@ -28,6 +28,7 @@
     "eslint": "8.57.1",
     "eslint-config-next": "14.2.12",
     "firebase": "^10.13.2",
+    "framer-motion": "^11.11.0",
     "lodash.debounce": "^4.0.8",
     "moment": "^2.30.1",
     "next": "14.2.12",
@@ -43,6 +44,8 @@
     "react-hot-toast": "^2.4.1",
     "react-icons": "^5.3.0",
     "react-medium-image-zoom": "^5.2.10",
+    "shadcn": "^2.1.0",
+    "swiper": "^11.1.14",
     "tailwindcss": "3.4.12",
     "typescript": "5.6.2",
     "uuid": "^10.0.0"
