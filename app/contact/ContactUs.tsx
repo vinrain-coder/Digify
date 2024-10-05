@@ -1,6 +1,7 @@
 // pages/contact.tsx
-import React from 'react';
-import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+import Link from "next/link";
+import React from "react";
+import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
 
 const ContactUs: React.FC = () => {
   return (
@@ -9,7 +10,8 @@ const ContactUs: React.FC = () => {
 
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg text-center">
         <p className="text-lg mb-6 text-gray-600">
-          We're here to help! Reach out to us through any of the following methods:
+          We are here to help! Reach out to us through any of the following
+          methods:
         </p>
 
         <div className="mb-6">
@@ -30,17 +32,28 @@ const ContactUs: React.FC = () => {
         </div>
 
         <div>
-          <h2 className="text-2xl font-semibold mb-4 text-gray-700">Follow Us</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-gray-700">
+            Follow Us
+          </h2>
           <div className="flex justify-center space-x-6">
-            <a href="#" className="text-blue-600 hover:text-blue-800 transition duration-300">
+            <Link
+              href="#"
+              className="text-blue-600 hover:text-blue-800 transition duration-300"
+            >
               <FaTwitter size={28} />
-            </a>
-            <a href="#" className="text-blue-600 hover:text-blue-800 transition duration-300">
+            </Link>
+            <Link
+              href="#"
+              className="text-blue-600 hover:text-blue-800 transition duration-300"
+            >
               <FaFacebook size={28} />
-            </a>
-            <a href="#" className="text-blue-600 hover:text-blue-800 transition duration-300">
+            </Link>
+            <Link
+              href="#"
+              className="text-blue-600 hover:text-blue-800 transition duration-300"
+            >
               <FaInstagram size={28} />
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -49,4 +62,3 @@ const ContactUs: React.FC = () => {
 };
 
 export default ContactUs;
-
