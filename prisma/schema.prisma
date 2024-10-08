@@ -22,6 +22,9 @@ model User {
   updatedAt         DateTime        @updatedAt
   verificationToken String?         @unique
   reviews           Review[]
+
+  orders            Order[]
+  
 }
 
 enum Role {
@@ -63,3 +66,40 @@ model Review {
   Product     Product  @relation(fields: [productId], references: [id])
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+model Order{
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  amount Float
+currency String
+status String
+deliveryStatus String?
+createDate DateTime @default(now())
+paymentIntentId String @unique
+products CartProduct[]
+address Address?
+
+user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+type CartProduct{
+  id String
+  name String
+  description String
+  category String
+  brand String
+  selectedImg Image
+  size Size
+  quantity Int
+  price Float
+}
+
+type Address{
+  city String
+  country String
+  line1 String
+  line2 String?
+  postal_code String
+  state String
+}
+
