@@ -1,16 +1,24 @@
 import { CartProductType } from "@/app/product/[productId]/ProductDetails";
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import toast from "react-hot-toast";
 
 type CartContextType = {
   cartTotalQty: number;
   cartTotalAmount: number;
-  cartProducts: CartProductType[] | null;
+  cartProducts: CartProductType[];
   handleAddProductToCart: (product: CartProductType) => void;
   handleRemoveProductFromCart: (product: CartProductType) => void;
   handleCartQuantityIncrease: (product: CartProductType) => void;
   handleCartQuantityDecrease: (product: CartProductType) => void;
   handleClearCart: () => void;
+  paymentIntent: string | null;
+  handleSetPaymentIntent: (value: string | null) => void;
 };
 
 export const CartContext = createContext<CartContextType | null>(null);
@@ -23,15 +31,25 @@ export const CartContextProvider: React.FC<Props> = ({ children }) => {
   const [cartTotalQty, setCartTotalQty] = useState(0);
   const [cartTotalAmount, setCartTotalAmount] = useState(0);
   const [cartProducts, setCartProducts] = useState<CartProductType[]>([]); // Initialize as an empty array
-  const [toastMessage, setToastMessage] = useState<string | null>(null); // State to control toast messages
+
+  const [paymentIntent, setPaymentIntent] = useState<string | null>(null);
 
   // Load cart items from local storage
   useEffect(() => {
     const cartItems = localStorage.getItem("ShoepediCartItems");
     if (cartItems) {
-      const parsedItems: CartProductType[] = JSON.parse(cartItems);
-      setCartProducts(parsedItems);
+      try {
+        const parsedCartItems: CartProductType[] = JSON.parse(cartItems);
+        setCartProducts(parsedCartItems);
+      } catch (error) {
+        console.error("Failed to parse cart items:", error);
+      }
     }
+
+    const paymentIntent = localStorage.getItem("ShoepediPaymentIntent");
+
+    setCartProducts(cartProducts);
+    setPaymentIntent(paymentIntent);
   }, []);
 
   // Calculate total quantity and amount whenever cartProducts change
@@ -49,51 +67,46 @@ export const CartContextProvider: React.FC<Props> = ({ children }) => {
     setCartTotalAmount(total);
   }, [cartProducts]);
 
-  // Show toast when there's a new message
-  useEffect(() => {
-    if (toastMessage) {
-      toast.success(toastMessage);
-      const timer = setTimeout(() => setToastMessage(null), 2000); // Reset toastMessage after 2 seconds
-      return () => clearTimeout(timer); // Cleanup timeout
-    }
-  }, [toastMessage]);
-
   const handleAddProductToCart = useCallback((product: CartProductType) => {
     setCartProducts((prev) => {
-      const existingProduct = prev.find(item => item.id === product.id);
-      const updatedCart = existingProduct 
-        ? prev.map(item => 
-            item.id === product.id 
-              ? { ...item, quantity: item.quantity + 1 } 
+      const existingProduct = prev.find((item) => item.id === product.id);
+      const updatedCart = existingProduct
+        ? prev.map((item) =>
+            item.id === product.id
+              ? { ...item, quantity: item.quantity + 1 }
               : item
-          ) 
+          )
         : [...prev, { ...product, quantity: 1 }];
 
       localStorage.setItem("ShoepediCartItems", JSON.stringify(updatedCart));
-      setToastMessage("Product added to cart"); // Set toast message
+      toast.success("Product added to cart"); // Set toast message
       return updatedCart;
     });
   }, []);
 
-  const handleRemoveProductFromCart = useCallback((product: CartProductType) => {
-    setCartProducts((prev) => {
-      const filteredProducts = prev.filter((item) => item.id !== product.id);
-      localStorage.setItem("ShoepediCartItems", JSON.stringify(filteredProducts));
-      setToastMessage("Product removed"); // Set toast message
-      return filteredProducts;
-    });
-  }, []);
+  const handleRemoveProductFromCart = useCallback(
+    (product: CartProductType) => {
+      setCartProducts((prev) => {
+        const filteredProducts = prev.filter((item) => item.id !== product.id);
+        localStorage.setItem(
+          "ShoepediCartItems",
+          JSON.stringify(filteredProducts)
+        );
+        toast.success("Product removed"); // Set toast message
+        return filteredProducts;
+      });
+    },
+    []
+  );
 
   const handleCartQuantityIncrease = useCallback((product: CartProductType) => {
     setCartProducts((prev) => {
-      const updatedCart = prev.map(item => {
+      const updatedCart = prev.map((item) => {
         if (item.id === product.id) {
           if (item.quantity < 20) {
-            const newQuantity = item.quantity + 1;
-            setToastMessage("Increased quantity"); // Set toast message
-            return { ...item, quantity: newQuantity };
+            return { ...item, quantity: item.quantity + 1 };
           } else {
-            setToastMessage("Oops! Maximum reached"); // Set toast message
+            toast.error("Oops! Maximum reached"); // Set toast message
           }
         }
         return item;
@@ -105,14 +118,12 @@ export const CartContextProvider: React.FC<Props> = ({ children }) => {
 
   const handleCartQuantityDecrease = useCallback((product: CartProductType) => {
     setCartProducts((prev) => {
-      const updatedCart = prev.map(item => {
+      const updatedCart = prev.map((item) => {
         if (item.id === product.id) {
           if (item.quantity > 1) {
-            const newQuantity = item.quantity - 1;
-            setToastMessage("Decreased quantity"); // Set toast message
-            return { ...item, quantity: newQuantity };
+            return { ...item, quantity: item.quantity - 1 };
           } else {
-            setToastMessage("Oops! Minimum reached"); // Set toast message
+            toast.error("Oops! Minimum reached"); // Set toast message
           }
         }
         return item;
@@ -127,8 +138,16 @@ export const CartContextProvider: React.FC<Props> = ({ children }) => {
     setCartTotalQty(0);
     setCartTotalAmount(0);
     localStorage.setItem("ShoepediCartItems", JSON.stringify([]));
-    setToastMessage("Cart cleared"); // Set toast message
+    toast.success("Cart cleared"); // Set toast message
   }, []);
+
+  const handleSetPaymentIntent = useCallback(
+    (value: string | null) => {
+      setPaymentIntent(value);
+      localStorage.setItem("ShoepediPaymentIntent", JSON.stringify(value));
+    },
+    [paymentIntent]
+  );
 
   const value = {
     cartTotalQty,
@@ -139,6 +158,8 @@ export const CartContextProvider: React.FC<Props> = ({ children }) => {
     handleCartQuantityIncrease,
     handleCartQuantityDecrease,
     handleClearCart,
+    paymentIntent,
+    handleSetPaymentIntent,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
@@ -151,4 +172,4 @@ export const useCart = () => {
     throw new Error("useCart must be used within a CartContextProvider");
   }
   return context;
-};   
+};
