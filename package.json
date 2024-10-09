@@ -54,6 +54,7 @@
     "@types/next": "^8.0.7",
     "@types/node": "^22.7.5",
     "@types/nodemailer": "^6.4.16",
+    "@types/stripe": "^8.0.416",
     "prisma": "^5.20.0"
   }
 }

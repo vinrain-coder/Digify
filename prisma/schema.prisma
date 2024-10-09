@@ -68,11 +68,11 @@ model Review {
 }
 
 model Order{
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+ id          String   @id @default(auto()) @map("_id") @db.ObjectId
   userId String @db.ObjectId
   amount Float
-currency String
-status String
+  currency String
+  status String
 deliveryStatus String?
 createDate DateTime @default(now())
 paymentIntentId String @unique
