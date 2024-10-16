@@ -2,7 +2,6 @@ import bcrypt from 'bcrypt';
 import prisma from '@/libs/prismadb';
 import { NextResponse } from 'next/server';
 import { randomBytes } from 'crypto';
-import { sendVerificationEmail } from '@/libs/emailService'; // Ensure it's imported correctly
 
 export async function POST(request: Request) {
   try {
@@ -20,7 +19,6 @@ export async function POST(request: Request) {
 
     // Hash the user's password
     const hashedPassword = await bcrypt.hash(password, 10);
-    const verificationToken = randomBytes(32).toString('hex'); // Generate unique token
 
     // Create a new user
     const user = await prisma.user.create({
@@ -28,7 +26,7 @@ export async function POST(request: Request) {
         name,
         email,
         hashedPassword,
-        verificationToken,
+        verificationToken: randomBytes(32).toString('hex'), // Generate unique token
         isVerified: false, // Set to unverified initially
       },
       select: {
@@ -39,17 +37,7 @@ export async function POST(request: Request) {
 
     console.log('Created user:', user); // Log the user object to debug
 
-    // Ensure email exists before sending verification
-    if (!user.email) {
-      console.error('User email not found:', user);
-      return NextResponse.json({ error: 'Failed to find email for verification' }, { status: 500 });
-    }
-
-    // Send verification email
-    await sendVerificationEmail(user.email, verificationToken);
-    console.log('Verification email sent to:', user.email);
-
-    return NextResponse.json({ message: 'Registration successful! Please check your email to verify your account.' });
+    return NextResponse.json({ message: 'Registration successful!' });
   } catch (error: any) {
     console.error('Registration error:', error.message || error);
     return NextResponse.json({ error: error.message || 'Something went wrong during registration' }, { status: 500 });
