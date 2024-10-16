@@ -7,11 +7,15 @@ import Heading from "../components/Heading";
 import Button from "../components/Button";
 import ItemContent from "./ItemContent";
 import { formatPrice } from "@/utils/formatPrice";
-import { useRouter } from "next/navigation"; // Import useRouter for navigation
+import { useRouter } from "next/navigation"; 
 
-const CartClient = () => {
+interface CartClientProps{
+  currentUser: SafeUser || null
+}
+
+const CartClient: React.FC<CartClientProps> = ({ currentUser }) => {
   const { cartProducts, handleClearCart, cartTotalAmount } = useCart();
-  const router = useRouter(); // Initialize useRouter for navigation
+  const router = useRouter();
 
   if (!cartProducts || cartProducts.length === 0) {
     return (
@@ -74,10 +78,13 @@ const CartClient = () => {
         </div>
 
         <div className="flex flex-col gap-2 items-end">
-          <Button 
-            label="Checkout" 
-            custom="md:w-40" 
-            onClick={handleCheckout} // Use handleCheckout for navigation
+          <Button
+            label={currentUser ? "Checkout" : "Login to checkout"}
+            custom="md:w-40"
+            outline={currentUser ? false : true}
+            onclick={() => {
+              currentUser ? router.push("/checkout") : router.push("/login");
+            }}
           />
           <Link href={"/"} className="text-slate-500 flex items-center gap-1">
             <MdArrowBack />
@@ -90,4 +97,3 @@ const CartClient = () => {
 };
 
 export default CartClient;
-

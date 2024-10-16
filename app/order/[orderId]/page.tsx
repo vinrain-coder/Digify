@@ -1,23 +1,23 @@
-// import Container from "@/app/components/Container";
-// import OrderDetails from "./OrderDetails";
-// import getOrderById from "@/actions/getOrderById";
-// import NullData from "@/app/components/NullData";
+import Container from "@/app/components/Container";
+import OrderDetails from "./OrderDetails";
+import getOrderById from "@/actions/getOrderById";
+import NullData from "@/app/components/NullData";
 
-// interface IParams {
-//   orderId?: string;
-// }
+interface IParams {
+  orderId?: string;
+}
 
-// const Order = async ({ params }: { params: IParams }) => {
-//   const order = await getOrderById(params);
-//   if (!order) return <NullData title="No Orders"></NullData>;
+const Order = async ({ params }: { params: IParams }) => {
+  const order = await getOrderById(params);
+  if (!order) return <NullData title="No Orders"></NullData>;
 
-//   return (
-//     <div className="p-8">
-//       <Container>
-//         <OrderDetails order={order} />
-//       </Container>
-//     </div>
-//   );
-// };
+  return (
+    <div className="p-8">
+      <Container>
+        <OrderDetails order={order} />
+      </Container>
+    </div>
+  );
+};
 
-// export default Order;
+export default Order;

@@ -24,7 +24,6 @@ model User {
 
   reviews           Review[]
   orders            Order[]
-  
 }
 
 enum Role {
@@ -40,19 +39,14 @@ model Product {
   brand       String
   category    String
   inStock     Boolean
-  images       Image[]   // Embedded array of images
+  images      Image[]   // Embedded array of images
   reviews     Review[]
-  sizes       Size[]     // Embedding sizes directly as an array of objects
 }
 
 type Image {
   color     String
   colorCode String
   imageUrl  String // Ensure the field name matches what's used in the API
-}
-
-type Size {
-  size   String   // Size value (e.g., "39", "40", "41")
 }
 
 model Review {
@@ -67,39 +61,37 @@ model Review {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Order{
- id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId String @db.ObjectId
-  amount Float
-  currency String
-  status String
-deliveryStatus String?
-createdDate DateTime @default(now())
-paymentIntentId String @unique
-products CartProduct[]
-address Address?
+model Order {
+  id                  String         @id @default(auto()) @map("_id") @db.ObjectId
+  userId              String         @db.ObjectId
+  amount              Float
+  currency            String
+  status              String
+  deliveryStatus      String?
+  createdDate         DateTime      @default(now())
+  paymentIntentId     String         @unique
+  products            CartProductType[]
+  address             Address?
 
-user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-type CartProduct{
-  id String
-  name String
+type CartProductType {
+  id          String
+  name        String
   description String
-  category String
-  brand String
+  category    String
+  brand       String
   selectedImg Image
-  size Size
-  quantity Int
-  price Float
+  quantity    Int
+  price       Float
 }
 
-type Address{
-  city String
-  country String
-  line1 String
-  line2 String?
+type Address {
+  city        String
+  country     String
+  line1       String
+  line2       String?
   postal_code String
-  state String
+  state       String
 }
-

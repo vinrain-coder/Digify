@@ -2,7 +2,6 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import SetColor from "@/app/components/products/SetColor";
-import SetSize from "@/app/components/products/SetSize";
 import { Rating } from "@mui/material";
 import SetQuantity from "@/app/components/products/SetQuantity";
 import Button from "@/app/components/Button";
@@ -19,7 +18,6 @@ interface ProductDetailsProps {
     description: string;
     category: string;
     brand: string;
-    sizes?: { size: string }[]; // Sizes as array of objects with 'size' field
     images?: {
       color: string;
       colorCode: string;
@@ -37,7 +35,6 @@ export type CartProductType = {
   description: string;
   category: string;
   brand: string;
-  size: string;
   selectedImg: SelectedImgType;
   quantity: number;
   price: number;
@@ -57,11 +54,6 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
   const { handleAddProductToCart, cartProducts } = useCart();
   const [isProductInCart, setIsProductInCart] = useState(false);
 
-  // Normalize sizes to ensure it's an array of strings
-  const normalizedSizes = Array.isArray(product.sizes)
-    ? product.sizes.map((sizeObj) => sizeObj.size)
-    : [];
-
   // Normalize images to match SelectedImgType[]
   const normalizedImages = Array.isArray(product.images)
     ? product.images.map((img) => ({
@@ -77,7 +69,6 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
     description: product.description,
     category: product.category,
     brand: product.brand,
-    size: normalizedSizes.length ? normalizedSizes[0] : "",
     selectedImg: normalizedImages.length
       ? normalizedImages[0]
       : { color: "", colorCode: "", image: "" },
@@ -106,13 +97,6 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
     setCartProduct((prev) => ({
       ...prev,
       selectedImg: value,
-    }));
-  }, []);
-
-  const handleSizeSelect = useCallback((size: string) => {
-    setCartProduct((prev) => ({
-      ...prev,
-      size,
     }));
   }, []);
 
@@ -201,14 +185,6 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
             />
             <Horizontal />
 
-            {/* Size Selector */}
-            <SetSize
-              sizes={normalizedSizes}
-              selectedSize={cartProduct.size}
-              handleSizeSelect={handleSizeSelect}
-            />
-            <Horizontal />
-
             {/* Quantity Selector */}
             <SetQuantity
               cartProduct={cartProduct}
@@ -234,4 +210,3 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
 };
 
 export default ProductDetails;
-

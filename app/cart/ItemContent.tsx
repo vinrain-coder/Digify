@@ -38,7 +38,6 @@ const ItemContent: React.FC<ItemContentProps> = ({ item }) => {
       <div className="flex flex-col justify-between gap-1">
         <Link href={`/product/${item.id}`}>{truncateText(item.name)}</Link>
         <div className="text-slate-500">{item.selectedImg.color}</div>
-        <div className="text-slate-500"> {item.size}</div>
         <div className="text-slate-500"> {formatPrice(item.price)}</div>
         <div className="mt-1 flex gap-1 justify-between items-center md:hidden">
           Qty:

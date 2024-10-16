@@ -10,8 +10,6 @@ import TextArea from "@/app/components/inputs/TextArea";
 import firebaseApp from "@/libs/firebase";
 import { categories } from "@/utils/Categories";
 import { colors } from "@/utils/Colors";
-import { Sizes } from "@/utils/Sizes";
-import SelectSize from "@/app/components/inputs/SelectSize";
 import { useCallback, useEffect, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -38,9 +36,8 @@ export type UploadedImageType = {
 
 const AddProductForm = () => {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false); 
-  const [images, setImages] = useState<ImageType[]>([]); // Initialize as an empty array
-  const [selectedSizes, setSelectedSizes] = useState<string[]>([]); // Manage selected sizes
+  const [isLoading, setIsLoading] = useState(false);
+  const [images, setImages] = useState<ImageType[]>([]);
   const [isProductCreated, setIsProductCreated] = useState(false);
 
   const {
@@ -70,7 +67,6 @@ const AddProductForm = () => {
     if (isProductCreated) {
       reset();
       setImages([]);
-      setSelectedSizes([]);
       setIsProductCreated(false);
     }
   }, [isProductCreated, reset]);
@@ -141,11 +137,10 @@ const AddProductForm = () => {
 
     await handleImageUploads();
 
-    // Prepare the product data with uploaded images and selected sizes
+    // Prepare the product data with uploaded images
     const productData = {
       ...data,
       images: uploadedImages,
-      sizes: selectedSizes.map((size) => ({ size })), // Map sizes to the correct format
     };
 
     // Send the product data to the API
@@ -180,16 +175,6 @@ const AddProductForm = () => {
   const removeImageFromState = useCallback((value: ImageType) => {
     setImages((prev) => prev.filter((item) => item.color !== value.color));
   }, []);
-
-  const handleSizeSelection = (size: string) => {
-    setSelectedSizes((prev) => {
-      const isSelected = prev.includes(size);
-      if (isSelected) {
-        return prev.filter((item) => item !== size); // Remove if already selected
-      }
-      return [...prev, size]; // Add size if not selected
-    });
-  };
 
   return (
     <>
@@ -253,7 +238,7 @@ const AddProductForm = () => {
       <div className="w-full flex flex-col flex-wrap gap-4">
         <div>
           <div className="font-bold">
-            Select the available sizes, colors, and upload their images
+            Select the available colors and upload their images
           </div>
           <div className="text-sm">You must upload an image for each color</div>
         </div>
@@ -266,18 +251,6 @@ const AddProductForm = () => {
               removeImageFromState={removeImageFromState}
               isProductCreated={isProductCreated}
             />
-          ))}
-        </div>
-        <div className="mb-2 font-semibold">Select Sizes</div>
-        <div className="grid gap-3 grid-cols-4 md:grid-cols-6 max-h-[50vh] overflow-y-auto">
-          {Sizes.map((item) => (
-            <div key={item.label} className="col-span">
-              <SelectSize
-                onClick={() => handleSizeSelection(item.label)}
-                selected={selectedSizes.includes(item.label)}
-                label={item.label}
-              />
-            </div>
           ))}
         </div>
       </div>

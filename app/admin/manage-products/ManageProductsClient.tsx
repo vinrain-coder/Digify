@@ -36,9 +36,6 @@ const ManageProductsClient: React.FC<ManageProductsClientProps> = ({
         price: formatPrice(product.price),
         category: product.category,
         brand: product.brand,
-        sizes: product.sizes
-          ? product.sizes.map((size) => size.size).join(", ")
-          : "N/A",
         inStock: product.inStock,
         images: product.images,
       }))
@@ -59,11 +56,6 @@ const ManageProductsClient: React.FC<ManageProductsClientProps> = ({
     },
     { field: "category", headerName: "Category", width: 100 },
     { field: "brand", headerName: "Brand", width: 100 },
-    {
-      field: "sizes",
-      headerName: "Sizes",
-      width: 180,
-    },
     {
       field: "inStock",
       headerName: "In Stock",
