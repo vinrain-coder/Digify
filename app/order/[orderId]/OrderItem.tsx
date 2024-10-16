@@ -15,7 +15,7 @@ const OrderItem: React.FC<OrderItemProps> = ({ item }) => {
       <div className="col-span-2 justify-self-start flex gap-2 md:gap-4">
         <div className="relative w-[70px] aspect-square ">
           <Image
-            src={item.selectedImg.image}
+            src={item.selectedImg.imageUrl}
             alt={item.name}
             fill
             className="object-contain"

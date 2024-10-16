@@ -30,8 +30,7 @@ interface Props {
 export const CartContextProvider: React.FC<Props> = ({ children }) => {
   const [cartTotalQty, setCartTotalQty] = useState(0);
   const [cartTotalAmount, setCartTotalAmount] = useState(0);
-  const [cartProducts, setCartProducts] = useState<CartProductType[]>([]); // Initialize as an empty array
-
+  const [cartProducts, setCartProducts] = useState<CartProductType[]>([]);
   const [paymentIntent, setPaymentIntent] = useState<string | null>(null);
 
   // Load cart items from local storage
@@ -47,8 +46,6 @@ export const CartContextProvider: React.FC<Props> = ({ children }) => {
     }
 
     const paymentIntent = localStorage.getItem("ShoepediPaymentIntent");
-
-    setCartProducts(cartProducts);
     setPaymentIntent(paymentIntent);
   }, []);
 
@@ -79,7 +76,7 @@ export const CartContextProvider: React.FC<Props> = ({ children }) => {
         : [...prev, { ...product, quantity: 1 }];
 
       localStorage.setItem("ShoepediCartItems", JSON.stringify(updatedCart));
-      toast.success("Product added to cart"); // Set toast message
+      toast.success("Product added to cart");
       return updatedCart;
     });
   }, []);
@@ -92,7 +89,7 @@ export const CartContextProvider: React.FC<Props> = ({ children }) => {
           "ShoepediCartItems",
           JSON.stringify(filteredProducts)
         );
-        toast.success("Product removed"); // Set toast message
+        toast.success("Product removed");
         return filteredProducts;
       });
     },
@@ -106,7 +103,7 @@ export const CartContextProvider: React.FC<Props> = ({ children }) => {
           if (item.quantity < 20) {
             return { ...item, quantity: item.quantity + 1 };
           } else {
-            toast.error("Oops! Maximum reached"); // Set toast message
+            toast.error("Oops! Maximum reached");
           }
         }
         return item;
@@ -123,7 +120,7 @@ export const CartContextProvider: React.FC<Props> = ({ children }) => {
           if (item.quantity > 1) {
             return { ...item, quantity: item.quantity - 1 };
           } else {
-            toast.error("Oops! Minimum reached"); // Set toast message
+            toast.error("Oops! Minimum reached");
           }
         }
         return item;
@@ -138,7 +135,7 @@ export const CartContextProvider: React.FC<Props> = ({ children }) => {
     setCartTotalQty(0);
     setCartTotalAmount(0);
     localStorage.setItem("ShoepediCartItems", JSON.stringify([]));
-    toast.success("Cart cleared"); // Set toast message
+    toast.success("Cart cleared");
   }, []);
 
   const handleSetPaymentIntent = useCallback(
@@ -146,7 +143,7 @@ export const CartContextProvider: React.FC<Props> = ({ children }) => {
       setPaymentIntent(value);
       localStorage.setItem("ShoepediPaymentIntent", JSON.stringify(value));
     },
-    [paymentIntent]
+    []
   );
 
   const value = {

@@ -7,7 +7,7 @@ export default async function getOrdersByUserId(userId: string) {
         user: true,
       },
       orderBy: {
-        createDate: "desc",
+        createdDate: "desc",
       },
       where: {
         userId: userId,

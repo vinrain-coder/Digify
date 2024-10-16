@@ -1,3 +1,4 @@
+// ManageOrdersClient.tsx
 "use client";
 
 import { Order, User } from "@prisma/client";
@@ -19,7 +20,7 @@ import { useRouter } from "next/navigation";
 import moment from "moment";
 
 interface ManageOrdersClientProps {
-  orders: ExtendedOrder[];
+  orders: ExtendedOrder[]; // Ensure this is correctly typed
 }
 
 type ExtendedOrder = Order & {
@@ -28,15 +29,16 @@ type ExtendedOrder = Order & {
 
 const ManageOrdersClient: React.FC<ManageOrdersClientProps> = ({ orders }) => {
   const router = useRouter();
-  const rows =
-    orders?.map((order) => ({
-      id: order.id,
-      customer: order.user.name,
-      amount: formatPrice(order.amount),
-      paymentStatus: order.status,
-      date: moment(order.createDate).fromNow(),
-      deliveryStatus: order.deliveryStatus,
-    })) || [];
+
+  // Ensure that rows is always an array
+  const rows = orders.map((order) => ({
+    id: order.id,
+    customer: order.user.name || "Unknown", // Fallback for customer name
+    amount: formatPrice(order.amount),
+    paymentStatus: order.status,
+    date: moment(order.createdDate).fromNow(),
+    deliveryStatus: order.deliveryStatus,
+  }));
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 220 },
@@ -139,7 +141,7 @@ const ManageOrdersClient: React.FC<ManageOrdersClientProps> = ({ orders }) => {
         toast.error("Oops! Something went wrong");
         console.error(err);
       });
-  }, []);
+  }, [router]);
 
   const handleDeliver = useCallback((id: string) => {
     axios
@@ -152,7 +154,7 @@ const ManageOrdersClient: React.FC<ManageOrdersClientProps> = ({ orders }) => {
         toast.error("Oops! Something went wrong");
         console.error(err);
       });
-  }, []);
+  }, [router]);
 
   return (
     <div className="max-w-[1150px] m-auto text-xl">

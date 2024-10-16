@@ -8,9 +8,10 @@ import Button from "../components/Button";
 import ItemContent from "./ItemContent";
 import { formatPrice } from "@/utils/formatPrice";
 import { useRouter } from "next/navigation"; 
+import { SafeUser } from "@/types";
 
-interface CartClientProps{
-  currentUser: SafeUser || null
+interface CartClientProps {
+  currentUser: SafeUser | null; 
 }
 
 const CartClient: React.FC<CartClientProps> = ({ currentUser }) => {
@@ -82,7 +83,7 @@ const CartClient: React.FC<CartClientProps> = ({ currentUser }) => {
             label={currentUser ? "Checkout" : "Login to checkout"}
             custom="md:w-40"
             outline={currentUser ? false : true}
-            onclick={() => {
+            onClick={() => {
               currentUser ? router.push("/checkout") : router.push("/login");
             }}
           />
