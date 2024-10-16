@@ -1,7 +1,6 @@
 import bcrypt from 'bcrypt';
 import prisma from '@/libs/prismadb';
 import { NextResponse } from 'next/server';
-import { randomBytes } from 'crypto';
 
 export async function POST(request: Request) {
   try {
@@ -26,8 +25,6 @@ export async function POST(request: Request) {
         name,
         email,
         hashedPassword,
-        verificationToken: randomBytes(32).toString('hex'), // Generate unique token
-        isVerified: false, // Set to unverified initially
       },
       select: {
         email: true,
