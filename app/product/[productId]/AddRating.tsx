@@ -40,8 +40,7 @@ const AddRating: React.FC<AddRatingProps> = ({ product, user }) => {
     },
   });
 
-  // Corrected declaration of setCustomValue
-  const setCustomValue = (id: string, value: any) => {
+  const setCustomValue = (id: string, value: number) => {
     setValue(id, value, {
       shouldTouch: true,
       shouldDirty: true,
@@ -51,16 +50,16 @@ const AddRating: React.FC<AddRatingProps> = ({ product, user }) => {
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);
-    if (data.rating === 0) {
+    if (data.rating < 3) { // Preventing ratings below 3 stars
       setIsLoading(false);
-      return toast.error("No rating selected");
+      return toast.error("Please provide a rating of at least 3 stars.");
     }
 
-    const ratingData = { ...data, userId: user?.id, productId: product.id }; // Ensure you pass productId
+    const ratingData = { ...data, userId: user?.id, productId: product.id };
 
     try {
       await axios.post("/api/rating", ratingData);
-      toast.success("Rating submitted");
+      toast.success("Thank you for your positive feedback!");
       router.refresh();
       reset();
     } catch (error) {
@@ -72,13 +71,13 @@ const AddRating: React.FC<AddRatingProps> = ({ product, user }) => {
 
   if (!user || !product) return null;
 
-  const deliveredOrder = user?.orders.some(
+  const deliveredOrder = user.orders.some(
     (order) =>
       order.products.find((item) => item.id === product.id) &&
       order.deliveryStatus === "delivered"
   );
 
-  const userReview = product?.reviews.find((review: Review) => {
+  const userReview = product.reviews.find((review: Review) => {
     return review.userId === user.id;
   });
 
@@ -89,21 +88,21 @@ const AddRating: React.FC<AddRatingProps> = ({ product, user }) => {
       <Heading title="Rate this product" />
       <Rating
         onChange={(event, newValue) => {
-          setCustomValue("rating", newValue);
+          setCustomValue("rating", newValue || 0);
         }}
       />
       <Input
         id="comment"
-        label="Comment"
+        label="Comment (optional)"
         disabled={isLoading}
         register={register}
         errors={errors}
         required
       />
       <Button
-        label={isLoading ? "Loading..." : "Rate Product"}
+        label={isLoading ? "Loading..." : "Submit Feedback"}
         onClick={handleSubmit(onSubmit)}
-        disabled={isLoading} // Disable button while loading
+        disabled={isLoading}
       />
     </div>
   );

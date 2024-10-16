@@ -12,15 +12,11 @@ model User {
   name              String?
   email             String?         @unique
   emailVerified     DateTime?
-  isVerified        Boolean         @default(false)
   image             String?
   hashedPassword    String?
   role              Role            @default(USER)
-  resetToken        String?         
-  resetTokenExpiry  DateTime?
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @updatedAt
-  verificationToken String?         @unique
 
   reviews           Review[]
   orders            Order[]
