@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import Container from "@/app/components/Container";
 import OrdersClient from './OrderClient';
 import { getCurrentUser } from "@/actions/getCurrentUser";

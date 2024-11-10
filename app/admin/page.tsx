@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import getProducts from "@/actions/getProducts";
 import Summary from "./Summary";
 import getOrders from "@/actions/getOrders";

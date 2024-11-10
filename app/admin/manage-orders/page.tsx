@@ -1,4 +1,5 @@
-// ManageOrders.tsx
+export const dynamic = 'force-dynamic';
+
 import Container from "@/app/components/Container";
 import { getCurrentUser } from "@/actions/getCurrentUser";
 import NullData from "@/app/components/NullData";

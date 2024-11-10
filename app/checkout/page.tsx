@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import Container from "../components/Container";
 import FormWrap from "../components/FormWrap";
 import CheckoutClient from "./CheckoutClient";
