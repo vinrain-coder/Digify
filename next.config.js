@@ -7,18 +7,28 @@ const nextConfig = {
       "lh3.googleusercontent.com",
     ],
   },
-  // Commented out experimental feature
-  // experimental: {
-  //   staleTimes: {
-  //     dynamic: 60,
-  //   },
-  // },
+
+  // Enable experimental server actions to fix the useSearchParams issue
+  experimental: {
+    serverActions: true,
+    appDir: true, // Enable app directory features if you're using the `/app` structure
+  },
 
   eslint: {
+    // Ignore ESLint errors during the build process on Vercel
     ignoreDuringBuilds: true,
   },
+
   typescript: {
+    // Ignore TypeScript errors during the build process
     ignoreBuildErrors: true,
+  },
+
+  // Optionally set up React Suspense for better error handling with hooks like useSearchParams
+  reactStrictMode: true,
+  compiler: {
+    // Enable React server components for better support with app directory structure
+    styledComponents: true,
   },
 };
 
