@@ -32,10 +32,8 @@ const NavBar = async () => {
             >
               Digify
             </Link>
-            <div className="flex items-center gap-6 md:gap-12">
-              <div className="hidden md:block">
-                <SearchBar />
-              </div>
+            <SearchBar />
+            <div className="flex items-center justify-center gap-6">
               <CartCount />
               <UserMenu currentUser={currentUser} />
             </div>

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import queryString from "query-string";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
+import { MdSearch } from "react-icons/md";
 
 const SearchBar = () => {
   const router = useRouter();
@@ -55,21 +56,26 @@ const SearchBar = () => {
           {...register("searchTerm")}
           autoComplete="off"
           type="text"
-          placeholder="Explore Shoepedi"
-          className="p-2 border border-gray-300 rounded-l-md focus:outline-none focus:border-[0.5px] focus:border-slate-500 w-80"
+          placeholder="Explore Digify"
+          className="p-2 border border-gray-300 rounded-l-md focus:outline-none focus:border-[0.5px] focus:border-slate-500 w-28 sm:w-56 md:w-80 lg:w-96"
           onKeyDown={(e) => {
             if (e.key === "Enter") handleSubmit(onSubmit)(); // Handle Enter key submission
           }}
         />
         <button
           onClick={handleSubmit(onSubmit)}
-          className="bg-slate-700 hover:opacity-80 text-white p-2 rounded-r-md"
+          className="bg-slate-700 hover:opacity-80 text-white p-3 rounded-r-md"
         >
-          Search
+          <MdSearch />
         </button>
       </div>
-      {searchError && <span className="text-red-500 text-sm">{searchError}</span>} {/* Error message */}
-      {errors.searchTerm && <span className="text-red-500 text-sm">This field is required</span>}
+      {searchError && (
+        <span className="text-red-500 text-sm">{searchError}</span>
+      )}{" "}
+      {/* Error message */}
+      {errors.searchTerm && (
+        <span className="text-red-500 text-sm">This field is required</span>
+      )}
     </div>
   );
 };
