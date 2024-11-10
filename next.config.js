@@ -7,19 +7,13 @@ const nextConfig = {
       "lh3.googleusercontent.com",
     ],
   },
-  async headers() {
-    return [
-      {
-        source: "/:path*", // Match all routes
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=60, stale-while-revalidate=30",
-          },
-        ],
-      },
-    ];
-  },
+  // Commented out experimental feature
+  // experimental: {
+  //   staleTimes: {
+  //     dynamic: 60,
+  //   },
+  // },
+
   eslint: {
     ignoreDuringBuilds: true,
   },
